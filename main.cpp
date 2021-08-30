@@ -9,11 +9,18 @@ using namespace PK;
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "modernize-loop-convert"
 
-inline const char* bool_str(bool b) { return b ? "true" : "false"; }
+inline const char *bool_str(bool b) { return b ? "true" : "false"; }
 
 int main() {
     String text = "Hello, World!";
     std::cout << text << " - length: " << text.length() << std::endl;
+
+    String text_copy = text;
+    std::cout << "Copy: " << text_copy << " - length: " << text_copy.length() << std::endl;
+
+    String text_move = std::move(text_copy);
+    assert(!text_copy); // NOLINT(bugprone-use-after-move)
+    std::cout << "Move: " << text_move << " - length: " << text_move.length() << std::endl;
 
     std::cout << std::endl;
 

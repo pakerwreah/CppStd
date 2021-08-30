@@ -21,6 +21,8 @@ namespace PK {
     public:
         String(const char *data = "");
         String(const char *data, size_t length);
+        String(const String &other);
+        String(String &&other) noexcept;
 
         virtual ~String();
 
