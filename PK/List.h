@@ -6,22 +6,28 @@
 
 #include "Collection.h"
 #include "NodeIterator.h"
+#include <initializer_list>
 
 namespace PK {
 
     template<typename T>
     class List : public Collection<T, NodeIterator<T>> {
     private:
-        using Iterator = NodeIterator<T>;
-
         Node<T> *m_begin = nullptr;
         Node<T> *m_end = nullptr;
         size_t m_length = 0;
 
     public:
-        Iterator begin() const override { return {m_begin}; }
+        List() = default;
 
-        Iterator end() const override { return {nullptr}; }
+        List(std::initializer_list<T> items) {
+            for (const auto &item: items)
+                append(item);
+        }
+
+        NodeIterator<T> begin() const override { return {m_begin}; }
+
+        NodeIterator<T> end() const override { return {nullptr}; }
 
         size_t length() const override { return m_length; }
 

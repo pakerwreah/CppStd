@@ -14,37 +14,37 @@ namespace PK {
         };
 
         template<typename T>
-        class NodeIterator {
+        class NodeIterator : public Iterator<T, NodeIterator<T>> {
         private:
             Node<T> *m_ptr;
 
         public:
             NodeIterator(Node<T> *ptr) : m_ptr(ptr) {}
 
-            T operator*() const { return m_ptr->data; }
+            T operator*() const override { return m_ptr->data; }
 
             // Prefix increment
-            NodeIterator &operator++() {
+            NodeIterator &operator++() override {
                 m_ptr = m_ptr->next;
                 return *this;
             }
 
             // Postfix increment
-            NodeIterator operator++(int) { // NOLINT(cert-dcl21-cpp)
+            const NodeIterator operator++(int) override { // NOLINT(readability-const-return-type)
                 NodeIterator tmp = *this;
                 m_ptr = m_ptr->next;
                 return tmp;
             }
 
-            NodeIterator operator+(int n) {
+            NodeIterator operator+(int n) override {
                 NodeIterator tmp = *this;
-                while(n--) tmp++;
+                while(n--) ++tmp;
                 return tmp;
             }
 
-            bool operator==(const NodeIterator &other) { return other.m_ptr == m_ptr; };
+            bool operator==(const NodeIterator &other) override { return other.m_ptr == m_ptr; };
 
-            bool operator!=(const NodeIterator &other) { return other.m_ptr != m_ptr; };
+            bool operator!=(const NodeIterator &other) override { return other.m_ptr != m_ptr; };
         };
     }
 }

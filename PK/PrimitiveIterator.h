@@ -8,7 +8,7 @@ namespace PK {
 
     namespace {
         template<typename T>
-        class PrimitiveIterator {
+        class PrimitiveIterator : public Iterator<T, PrimitiveIterator<T>> {
         private:
             T *m_ptr;
 
@@ -17,30 +17,30 @@ namespace PK {
 
             PrimitiveIterator(const T *ptr) : m_ptr((T *) ptr) {}
 
-            T operator*() const { return *m_ptr; }
+            T operator*() const override { return *m_ptr; }
 
             // Prefix increment
-            PrimitiveIterator &operator++() {
+            PrimitiveIterator &operator++() override {
                 m_ptr++;
                 return *this;
             }
 
             // Postfix increment
-            PrimitiveIterator operator++(int) { // NOLINT(cert-dcl21-cpp)
+            const PrimitiveIterator operator++(int) override { // NOLINT(readability-const-return-type)
                 PrimitiveIterator tmp = *this;
                 m_ptr++;
                 return tmp;
             }
 
-            PrimitiveIterator operator+(int n) {
+            PrimitiveIterator operator+(int n) override {
                 PrimitiveIterator tmp = *this;
                 tmp.m_ptr += n;
                 return tmp;
             }
 
-            bool operator==(const PrimitiveIterator &other) { return other.m_ptr == m_ptr; };
+            bool operator==(const PrimitiveIterator &other) override { return other.m_ptr == m_ptr; };
 
-            bool operator!=(const PrimitiveIterator &other) { return other.m_ptr != m_ptr; };
+            bool operator!=(const PrimitiveIterator &other) override { return other.m_ptr != m_ptr; };
         };
     }
 }

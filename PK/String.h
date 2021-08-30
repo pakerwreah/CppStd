@@ -11,7 +11,6 @@ namespace PK {
 
     class String : public Collection<char, PrimitiveIterator<char>> {
     private:
-        using Iterator = PrimitiveIterator<char>;
         // small string optimization
         static constexpr int sso_length = 50;
         char sso_data[sso_length]{};
@@ -26,12 +25,16 @@ namespace PK {
 
         virtual ~String();
 
-        size_t length() const override { return m_length; }
+        String &operator=(const String &other) = default;
 
-        Iterator begin() const override { return {m_data}; }
-
-        Iterator end() const override { return {m_data + m_length}; }
+        const char *data() const { return m_data; }
 
         operator const char *() { return m_data; }
+
+        size_t length() const override { return m_length; }
+
+        PrimitiveIterator<char> begin() const override { return {m_data}; }
+
+        PrimitiveIterator<char> end() const override { return {m_data + m_length}; }
     };
 }
