@@ -36,6 +36,33 @@ namespace PK {
             other.m_length = 0;
         }
 
+        List &operator=(const List &other) {
+
+            if (&other != this) {
+                removeAll();
+
+                for (const auto &item: other)
+                    append(item);
+            }
+            return *this;
+        }
+
+        List &operator=(List &&other) noexcept {
+
+            if (&other != this) {
+                removeAll();
+
+                m_begin = other.m_begin;
+                m_end = other.m_end;
+                m_length = other.m_length;
+
+                other.m_begin = nullptr;
+                other.m_end = nullptr;
+                other.m_length = 0;
+            }
+            return *this;
+        }
+
         NodeIterator<T> begin() const override { return {m_begin}; }
 
         NodeIterator<T> end() const override { return {nullptr}; }
