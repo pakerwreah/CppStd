@@ -4,36 +4,31 @@
 
 #pragma once
 
-#include "Collection.h"
+#include "Sequence.h"
 
 namespace PK {
 
-    class String : public Collection<char> {
+    class String final : public Sequence<char> {
     private:
         // small string optimization
         static constexpr int sso_length = 50;
         char sso_data[sso_length]{};
-        char *m_data;
-        size_t m_length;
+        char *sso_begin = sso_data;
+
+        bool is_sso() const;
+        char *alloc_or_sso(size_t length) const;
 
     public:
-        String(const char *data = "");
-        String(const char *data, size_t length);
         String(const String &other);
         String(String &&other) noexcept;
+        String(const char *data = "");
+        String(const char *data, size_t length);
 
-        virtual ~String();
+        ~String() override;
 
-        String &operator=(const String &other) = default;
+        String &operator=(const String &other);
+        String &operator=(String &&other) noexcept;
 
-        const char *data() const { return m_data; }
-
-        operator const char *() { return m_data; }
-
-        size_t length() const override { return m_length; }
-
-        char *begin() const override { return m_data; }
-
-        char *end() const override { return m_data + m_length; }
+        operator const char *() { return data(); }
     };
 }

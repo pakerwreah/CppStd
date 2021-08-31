@@ -15,7 +15,7 @@ namespace PK {
     class Array : public Collection<T> {
     private:
         T m_data[count]{};
-        T* m_begin = m_data;
+        T *m_begin = m_data;
 
     public:
         Array(std::initializer_list<T> items) {

@@ -13,6 +13,33 @@ using namespace PK;
 
 inline const char *bool_str(bool b) { return b ? "true" : "false"; }
 
+void testSequence() {
+    std::cout << std::endl << "#----- Sequence -----#" << std::endl;
+
+    Sequence sequence = {1, 2, 3, 4, 5};
+
+    std::cout << "Is empty: " << bool_str(sequence.is_empty()) << std::endl;
+
+    std::cout << "Range loop:";
+
+    for (int i: sequence)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Index loop:";
+
+    sequence[2] = -3;
+
+    for (int i = 0; i < sequence.length(); i++)
+        std::cout << " " << sequence[i];
+
+    std::cout << std::endl << "Iterator loop:";
+
+    for (auto it = sequence.begin(); it != sequence.end(); it++)
+        std::cout << " " << *it;
+
+    std::cout << std::endl;
+}
+
 void testString() {
     std::cout << std::endl << "#----- String -----#" << std::endl;
 
@@ -107,13 +134,19 @@ void testStringUtils() {
     std::cout << std::endl;
 
     Array<String, 3> array_parts = {"a", "b", "c"};
-    std::cout << "Array join: " << StringUtils::join(array_parts, ",") << std::endl;
+    Array<int, 3> array_parts_int = {1, 2, 3};
+    std::cout << "Array join (String): " << StringUtils::join(array_parts, ",") << std::endl;
+    std::cout << "Array join (int): " << StringUtils::join(array_parts_int, ",") << std::endl;
 
     List<String> list_parts = {"a", "b", "c"};
-    std::cout << "List join: " << StringUtils::join(list_parts, ",") << std::endl;
+    List list_parts_int = {1, 2, 3};
+    std::cout << "List join (String): " << StringUtils::join(list_parts, ",") << std::endl;
+    std::cout << "List join (int): " << StringUtils::join(list_parts_int, ",") << std::endl;
 }
 
 int main() {
+
+    testSequence();
 
     testString();
 
