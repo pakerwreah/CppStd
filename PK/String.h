@@ -5,11 +5,10 @@
 #pragma once
 
 #include "Collection.h"
-#include "PrimitiveIterator.h"
 
 namespace PK {
 
-    class String : public Collection<char, PrimitiveIterator<char>> {
+    class String : public Collection<char> {
     private:
         // small string optimization
         static constexpr int sso_length = 50;
@@ -33,8 +32,8 @@ namespace PK {
 
         size_t length() const override { return m_length; }
 
-        PrimitiveIterator<char> begin() const override { return {m_data}; }
+        char *begin() const override { return m_data; }
 
-        PrimitiveIterator<char> end() const override { return {m_data + m_length}; }
+        char *end() const override { return m_data + m_length; }
     };
 }

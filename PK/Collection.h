@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <type_traits>
+#include <cstddef>
 
 namespace PK {
 
@@ -20,15 +20,13 @@ namespace PK {
 
     template<typename T, typename I>
     struct Iterable {
-        static_assert(std::is_base_of_v<Iterator<T, I>, I>, "Template argument 'I' should be an 'Iterator'");
-
         virtual I begin() const = 0;
         virtual I end() const = 0;
 
         T operator[](int pos) const { return *(this->begin() + pos); }
     };
 
-    template<typename T, typename I>
+    template<typename T, typename I = T *>
     struct Collection : public Iterable<T, I> {
 
         virtual size_t length() const = 0;

@@ -5,7 +5,6 @@
 #pragma once
 
 #include "Collection.h"
-#include "PrimitiveIterator.h"
 #include <initializer_list>
 #include <cassert>
 #include <algorithm>
@@ -13,19 +12,20 @@
 namespace PK {
 
     template<typename T, size_t count>
-    class Array : public Collection<T, PrimitiveIterator<T>> {
+    class Array : public Collection<T> {
     private:
         T m_data[count]{};
+        T* m_begin = m_data;
 
     public:
         Array(std::initializer_list<T> items) {
             assert(items.size() == count);
-            std::copy(items.begin(),  items.end(), m_data);
+            std::copy(items.begin(), items.end(), m_data);
         }
 
-        PrimitiveIterator<T> begin() const override { return {m_data}; }
+        T *begin() const override { return m_begin; }
 
-        PrimitiveIterator<T> end() const override { return {m_data + count}; }
+        T *end() const override { return m_begin + count; }
 
         size_t length() const override { return count; }
     };

@@ -9,7 +9,7 @@ namespace PK::StringUtils {
 
     List<String> split(const String &string, const String &separator) {
         List<String> parts;
-        char *token, *ptr = const_cast<char *>(string.data());
+        char *token, *ptr = string.begin();
 
         while ((token = strsep(&ptr, separator.data())) != nullptr) {
             if (*token != '\0')
