@@ -76,7 +76,7 @@ namespace PK {
             std::move(other.begin(), other.end(), m_data);
         }
 
-        virtual ~Sequence() {
+        ~Sequence() override {
             m_length = 0;
 
             if (m_data) {

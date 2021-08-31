@@ -11,7 +11,7 @@
 namespace PK {
 
     template<typename T>
-    class List : public Collection<T, NodeIterator<T>> {
+    class List final : public Collection<T, NodeIterator<T>> {
     private:
         Node<T> *m_begin = nullptr;
         Node<T> *m_end = nullptr;
@@ -35,6 +35,8 @@ namespace PK {
             other.m_end = nullptr;
             other.m_length = 0;
         }
+
+        ~List() override { removeAll(); }
 
         List &operator=(const List &other) {
 

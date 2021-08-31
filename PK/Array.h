@@ -12,7 +12,7 @@
 namespace PK {
 
     template<typename T, size_t count>
-    class Array : public Collection<T> {
+    class Array final : public Collection<T> {
     private:
         T m_data[count]{};
         T *m_begin = m_data;

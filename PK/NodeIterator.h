@@ -16,7 +16,7 @@ namespace PK {
         };
 
         template<typename T>
-        class NodeIterator : public Iterator<T, NodeIterator<T>> {
+        class NodeIterator final : public Iterator<T, NodeIterator<T>> {
         private:
             Node<T> *m_ptr;
 

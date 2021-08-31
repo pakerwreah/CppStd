@@ -15,5 +15,7 @@ namespace PK {
         virtual size_t length() const = 0;
 
         bool is_empty() const { return !length(); }
+
+        ~Collection() override = default;
     };
 }

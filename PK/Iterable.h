@@ -14,5 +14,7 @@ namespace PK {
         T operator[](int pos) const { return *(this->begin() + pos); }
 
         T &operator[](int pos) { return *(this->begin() + pos); }
+
+        virtual ~Iterable() = default;
     };
 }
