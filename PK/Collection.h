@@ -13,9 +13,9 @@ namespace PK {
         virtual T operator*() const = 0;
         virtual I &operator++() = 0;
         virtual const I operator++(int) = 0;
-        virtual I operator+(int n) = 0;
-        virtual bool operator==(const I &other) = 0;
-        virtual bool operator!=(const I &other) = 0;
+        virtual I operator+(int n) const = 0;
+        virtual bool operator==(const I &other) const = 0;
+        virtual bool operator!=(const I &other) const = 0;
     };
 
     template<typename T, typename I>
