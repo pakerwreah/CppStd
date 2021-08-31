@@ -10,6 +10,7 @@ using namespace PK;
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "modernize-loop-convert"
+#pragma ide diagnostic ignored "bugprone-use-after-move"
 
 inline const char *bool_str(bool b) { return b ? "true" : "false"; }
 
@@ -37,6 +38,38 @@ void testSequence() {
     for (auto it = sequence.begin(); it != sequence.end(); it++)
         std::cout << " " << *it;
 
+    std::cout << std::endl << "Copy:";
+
+    Sequence copy = sequence;
+    assert(sequence.begin() != nullptr);
+    assert(!sequence.is_empty());
+    assert(!copy.is_empty());
+    for (int i: copy)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Move:";
+
+    Sequence moved = std::move(sequence);
+    assert(sequence.begin() == nullptr);
+    assert(sequence.is_empty());
+    assert(!moved.is_empty());
+    for (int i: moved)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Move Assignment:";
+    moved = std::move(copy);
+    assert(copy.begin() == nullptr);
+    assert(copy.end() == nullptr);
+    assert(copy.is_empty());
+    assert(!moved.is_empty());
+    for (int i: moved)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Copy Assignment:";
+    copy = {1, 2, 3};
+    for (int i: copy)
+        std::cout << " " << i;
+
     std::cout << std::endl;
 }
 
@@ -50,7 +83,7 @@ void testString() {
     std::cout << "Copy: " << text_copy << " - length: " << text_copy.length() << std::endl;
 
     String text_move = std::move(text_copy);
-    assert(!text_copy); // NOLINT(bugprone-use-after-move)
+    assert(!text_copy);
     std::cout << "Move: " << text_move << " - length: " << text_move.length() << std::endl;
 
     std::cout << "Range loop:";
@@ -118,6 +151,66 @@ void testList() {
 
     for (auto it = list.begin(); it != list.end(); it++)
         std::cout << " " << *it;
+
+    std::cout << std::endl << "Copy:";
+
+    List copy = list;
+    assert(list.begin() != nullptr);
+    assert(!list.is_empty());
+    assert(!copy.is_empty());
+    for (int i: copy)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Move:";
+
+    List moved = std::move(list);
+    assert(list.begin() == nullptr);
+    assert(list.is_empty());
+    assert(!moved.is_empty());
+    for (int i: moved)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Move Assignment:";
+    moved = std::move(copy);
+    assert(copy.begin() == nullptr);
+    assert(copy.end() == nullptr);
+    assert(copy.is_empty());
+    assert(!moved.is_empty());
+    for (int i: moved)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Copy Assignment:";
+    copy = {1, 2, 3};
+    for (int i: copy)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Remove at begin:";
+    copy.removeAt(0);
+    assert(copy.length() == 2);
+    for (int i: copy)
+        std::cout << " " << i;
+
+    copy = {1, 2, 3};
+    std::cout << std::endl << "Remove at 1:";
+    copy.removeAt(1);
+    assert(copy.length() == 2);
+    for (int i: copy)
+        std::cout << " " << i;
+
+    copy = {1, 2, 3};
+    std::cout << std::endl << "Remove at end:";
+    copy.removeAt(2);
+    assert(copy.length() == 2);
+    for (int i: copy)
+        std::cout << " " << i;
+
+    std::cout << std::endl << "Remove all";
+
+    copy.removeAll();
+    assert(copy.begin() == nullptr);
+    assert(copy.end() == nullptr);
+    assert(copy.is_empty());
+    assert(!moved.is_empty());
 
     std::cout << std::endl;
 }
