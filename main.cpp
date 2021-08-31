@@ -14,6 +14,8 @@ using namespace PK;
 inline const char *bool_str(bool b) { return b ? "true" : "false"; }
 
 void testString() {
+    std::cout << std::endl << "#----- String -----#" << std::endl;
+
     String text = "Hello, World!";
     std::cout << text << " - length: " << text.length() << std::endl;
 
@@ -24,16 +26,16 @@ void testString() {
     assert(!text_copy); // NOLINT(bugprone-use-after-move)
     std::cout << "Move: " << text_move << " - length: " << text_move.length() << std::endl;
 
-    std::cout << std::endl << "Range loop:";
+    std::cout << "Range loop:";
 
     for (char c: text)
         std::cout << " " << c;
 
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl << "Join: " << StringUtils::join(text, " ") << std::endl;
 }
 
 void testArray() {
-    std::cout << "#----- Array -----#" << std::endl;
+    std::cout << std::endl << "#----- Array -----#" << std::endl;
 
     Array<int, 5> array = {1, 2, 3, 4, 5};
 
@@ -56,11 +58,11 @@ void testArray() {
     for (auto it = array.begin(); it != array.end(); it++)
         std::cout << " " << *it;
 
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl;
 }
 
 void testList() {
-    std::cout << "#----- List -----#" << std::endl;
+    std::cout << std::endl << "#----- List -----#" << std::endl;
 
     List<int> list;
 
@@ -90,13 +92,13 @@ void testList() {
     for (auto it = list.begin(); it != list.end(); it++)
         std::cout << " " << *it;
 
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl;
 }
 
 void testStringUtils() {
-    std::cout << "#----- StringUtils -----#" << std::endl;
+    std::cout << std::endl << "#----- StringUtils -----#" << std::endl;
 
-    std::cout << std::endl << "Split:";
+    std::cout << "Split:";
 
     auto split = StringUtils::split("a.bcd..e.", ".");
     for (auto s: split)
@@ -109,8 +111,6 @@ void testStringUtils() {
 
     List<String> list_parts = {"a", "b", "c"};
     std::cout << "List join: " << StringUtils::join(list_parts, ",") << std::endl;
-
-    std::cout << std::endl;
 }
 
 int main() {
