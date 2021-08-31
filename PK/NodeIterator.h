@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "Iterator.h"
+
 namespace PK {
 
     namespace {
