@@ -21,8 +21,6 @@ namespace PK {
         public:
             NodeIterator(Node<T> *ptr) : m_ptr(ptr) {}
 
-            T operator*() const override { return m_ptr->data; }
-
             // Prefix increment
             NodeIterator &operator++() override {
                 m_ptr = m_ptr->next;
@@ -41,6 +39,10 @@ namespace PK {
                 while (n--) ++tmp;
                 return tmp;
             }
+
+            T operator*() const override { return m_ptr->data; }
+
+            T &operator*() override { return m_ptr->data; }
 
             bool operator==(const NodeIterator &other) const override { return other.m_ptr == m_ptr; };
 

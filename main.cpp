@@ -46,6 +46,8 @@ void testArray() {
 
     std::cout << std::endl << "Index loop:";
 
+    array[2] = -3;
+
     for (int i = 0; i < array.length(); i++)
         std::cout << " " << array[i];
 
@@ -77,6 +79,8 @@ void testList() {
         std::cout << " " << i;
 
     std::cout << std::endl << "Index loop:";
+
+    list[2] = -3;
 
     for (int i = 0; i < list.length(); i++)
         std::cout << " " << list[i];

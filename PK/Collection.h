@@ -11,6 +11,7 @@ namespace PK {
     template<typename T, typename I>
     struct Iterator {
         virtual T operator*() const = 0;
+        virtual T &operator*() = 0;
         virtual I &operator++() = 0;
         virtual const I operator++(int) = 0;
         virtual I operator+(int n) const = 0;
@@ -24,6 +25,8 @@ namespace PK {
         virtual I end() const = 0;
 
         T operator[](int pos) const { return *(this->begin() + pos); }
+
+        T &operator[](int pos) { return *(this->begin() + pos); }
     };
 
     template<typename T, typename I = T *>
