@@ -20,9 +20,20 @@ namespace PK {
     public:
         List() = default;
 
+        List(const List &other) {
+            for (const auto &item: other)
+                append(item);
+        }
+
         List(std::initializer_list<T> items) {
             for (const auto &item: items)
                 append(item);
+        }
+
+        List(List &&other) noexcept: m_begin(other.m_begin), m_end(other.m_end), m_length(other.m_length) {
+            other.m_begin = nullptr;
+            other.m_end = nullptr;
+            other.m_length = 0;
         }
 
         NodeIterator<T> begin() const override { return {m_begin}; }
