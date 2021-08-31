@@ -69,7 +69,42 @@ namespace PK {
 
         size_t length() const override { return m_length; }
 
-        void append(T item) {
+        void removeAll() {
+            for (auto ptr = m_begin; ptr;) {
+                auto tmp = ptr;
+                ptr = ptr->next;
+                delete tmp;
+            }
+            m_begin = nullptr;
+            m_end = nullptr;
+            m_length = 0;
+        }
+
+        void removeAt(size_t pos) {
+
+            if (pos == 0) {
+                auto tmp = m_begin;
+                m_begin = tmp->next;
+                delete tmp;
+                m_length--;
+                return;
+            }
+
+            auto ptr = m_begin;
+            auto next = ptr->next;
+            for (--pos; next && pos; pos--) {
+                ptr = ptr->next;
+                next = next->next;
+            }
+
+            if (next) {
+                ptr->next = next->next;
+                delete next;
+                m_length--;
+            }
+        }
+
+        void append(const T &item) {
 
             auto new_node = new Node<T>{item};
 
