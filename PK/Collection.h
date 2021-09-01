@@ -22,6 +22,20 @@ namespace PK {
 
         T &operator[](int pos) { return *(this->begin() + pos); }
 
+        template<typename I2>
+        bool operator==(const Collection<T, I2> &other) const {
+
+            if (length() != other.length()) return false;
+
+            auto i1 = begin();
+            auto i2 = other.begin();
+
+            for (; i1 && i2; i1++, i2++)
+                if (*i1 != *i2) return false;
+
+            return true;
+        };
+
         virtual ~Collection() = default;
     };
 }

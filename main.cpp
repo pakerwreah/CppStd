@@ -187,13 +187,15 @@ void testList() {
     std::cout << std::endl << "Remove at begin:";
     copy.removeAt(0);
     assert(copy.length() == 2);
+    assert(copy == Sequence({2, 3}));
     for (int i: copy)
         std::cout << " " << i;
 
     copy = {1, 2, 3};
-    std::cout << std::endl << "Remove at 1:";
+    std::cout << std::endl << "Remove at middle:";
     copy.removeAt(1);
     assert(copy.length() == 2);
+    assert(copy == Sequence({1, 3}));
     for (int i: copy)
         std::cout << " " << i;
 
@@ -201,6 +203,7 @@ void testList() {
     std::cout << std::endl << "Remove at end:";
     copy.removeAt(2);
     assert(copy.length() == 2);
+    assert(copy == Sequence({1, 2}));
     for (int i: copy)
         std::cout << " " << i;
 
