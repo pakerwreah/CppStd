@@ -11,7 +11,7 @@
 namespace PK::StringUtils {
 
     template<typename T, typename I>
-    String join(const Iterable<T, I> &items, const char *glue) {
+    String join(const Collection<T, I> &items, const char *glue) {
         std::ostringstream os;
         for (auto it = items.begin(); it != items.end(); ++it) {
             if (it != items.begin())

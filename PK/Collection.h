@@ -4,18 +4,24 @@
 
 #pragma once
 
-#include "Iterable.h"
 #include <cstddef>
 
 namespace PK {
 
     template<typename T, typename I = T *>
-    struct Collection : public Iterable<T, I> {
+    struct Collection {
+
+        virtual I begin() const = 0;
+        virtual I end() const = 0;
 
         virtual size_t length() const = 0;
 
         bool isEmpty() const { return !length(); }
 
-        ~Collection() override = default;
+        T operator[](int pos) const { return *(this->begin() + pos); }
+
+        T &operator[](int pos) { return *(this->begin() + pos); }
+
+        virtual ~Collection() = default;
     };
 }
