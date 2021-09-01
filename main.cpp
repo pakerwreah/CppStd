@@ -19,7 +19,7 @@ void testSequence() {
 
     Sequence sequence = {1, 2, 3, 4, 5};
 
-    std::cout << "Is empty: " << bool_str(sequence.is_empty()) << std::endl;
+    std::cout << "Is empty: " << bool_str(sequence.isEmpty()) << std::endl;
 
     std::cout << "Range loop:";
 
@@ -42,8 +42,8 @@ void testSequence() {
 
     Sequence copy = sequence;
     assert(sequence.begin() != nullptr);
-    assert(!sequence.is_empty());
-    assert(!copy.is_empty());
+    assert(!sequence.isEmpty());
+    assert(!copy.isEmpty());
     for (int i: copy)
         std::cout << " " << i;
 
@@ -51,8 +51,8 @@ void testSequence() {
 
     Sequence moved = std::move(sequence);
     assert(sequence.begin() == nullptr);
-    assert(sequence.is_empty());
-    assert(!moved.is_empty());
+    assert(sequence.isEmpty());
+    assert(!moved.isEmpty());
     for (int i: moved)
         std::cout << " " << i;
 
@@ -60,8 +60,8 @@ void testSequence() {
     moved = std::move(copy);
     assert(copy.begin() == nullptr);
     assert(copy.end() == nullptr);
-    assert(copy.is_empty());
-    assert(!moved.is_empty());
+    assert(copy.isEmpty());
+    assert(!moved.isEmpty());
     for (int i: moved)
         std::cout << " " << i;
 
@@ -99,7 +99,7 @@ void testArray() {
 
     Array<int, 5> array = {1, 2, 3, 4, 5};
 
-    std::cout << "Is empty: " << bool_str(array.is_empty()) << std::endl;
+    std::cout << "Is empty: " << bool_str(array.isEmpty()) << std::endl;
 
     std::cout << "Range loop:";
 
@@ -126,14 +126,14 @@ void testList() {
 
     List<int> list;
 
-    std::cout << "Is empty: " << bool_str(list.is_empty()) << std::endl;
+    std::cout << "Is empty: " << bool_str(list.isEmpty()) << std::endl;
 
     std::cout << "Appending..." << std::endl;
 
     for (int i = 1; i <= 5; i++)
         list.append(i);
 
-    std::cout << "Is empty: " << bool_str(list.is_empty()) << std::endl;
+    std::cout << "Is empty: " << bool_str(list.isEmpty()) << std::endl;
 
     std::cout << "Range loop:";
 
@@ -156,8 +156,8 @@ void testList() {
 
     List copy = list;
     assert(list.begin() != nullptr);
-    assert(!list.is_empty());
-    assert(!copy.is_empty());
+    assert(!list.isEmpty());
+    assert(!copy.isEmpty());
     for (int i: copy)
         std::cout << " " << i;
 
@@ -165,8 +165,8 @@ void testList() {
 
     List moved = std::move(list);
     assert(list.begin() == nullptr);
-    assert(list.is_empty());
-    assert(!moved.is_empty());
+    assert(list.isEmpty());
+    assert(!moved.isEmpty());
     for (int i: moved)
         std::cout << " " << i;
 
@@ -174,8 +174,8 @@ void testList() {
     moved = std::move(copy);
     assert(copy.begin() == nullptr);
     assert(copy.end() == nullptr);
-    assert(copy.is_empty());
-    assert(!moved.is_empty());
+    assert(copy.isEmpty());
+    assert(!moved.isEmpty());
     for (int i: moved)
         std::cout << " " << i;
 
@@ -209,8 +209,8 @@ void testList() {
     copy.removeAll();
     assert(copy.begin() == nullptr);
     assert(copy.end() == nullptr);
-    assert(copy.is_empty());
-    assert(!moved.is_empty());
+    assert(copy.isEmpty());
+    assert(!moved.isEmpty());
 
     std::cout << std::endl;
 }
