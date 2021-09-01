@@ -13,6 +13,7 @@ namespace PK {
         virtual I &operator++() = 0;
         virtual const I operator++(int) = 0;
         virtual I operator+(int n) const = 0;
+        virtual operator bool() const = 0;
         virtual bool operator==(const I &other) const = 0;
         virtual bool operator!=(const I &other) const = 0;
         virtual ~Iterator() = default;

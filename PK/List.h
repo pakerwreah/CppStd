@@ -13,6 +13,8 @@ namespace PK {
     template<typename T>
     class List final : public Collection<T, NodeIterator<T>> {
     private:
+        using Iterator = NodeIterator<T>;
+
         Node<T> *m_begin = nullptr;
         Node<T> *m_end = nullptr;
         size_t m_length = 0;
@@ -65,9 +67,9 @@ namespace PK {
             return *this;
         }
 
-        NodeIterator<T> begin() const override { return {m_begin}; }
+        Iterator begin() const override { return {m_begin}; }
 
-        NodeIterator<T> end() const override { return {nullptr}; }
+        Iterator end() const override { return {nullptr}; }
 
         size_t length() const override { return m_length; }
 
@@ -103,6 +105,19 @@ namespace PK {
                 ptr->next = next->next;
                 delete next;
                 m_length--;
+            }
+        }
+
+        void remove(Iterator &iterator) {
+
+            auto it = begin();
+            size_t i = 0;
+
+            for (; it && it != iterator; it++, i++);
+
+            if (it) {
+                iterator = ++it;
+                removeAt(i);
             }
         }
 

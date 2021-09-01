@@ -38,13 +38,15 @@ namespace PK {
 
             NodeIterator operator+(int n) const override {
                 NodeIterator tmp = *this;
-                while (n--) ++tmp;
+                while (0 < n--) ++tmp;
                 return tmp;
             }
 
             T operator*() const override { return m_ptr->data; }
 
             T &operator*() override { return m_ptr->data; }
+
+            operator bool() const override { return m_ptr; }
 
             bool operator==(const NodeIterator &other) const override { return other.m_ptr == m_ptr; };
 

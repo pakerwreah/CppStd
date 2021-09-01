@@ -207,6 +207,36 @@ void testList() {
     for (int i: copy)
         std::cout << " " << i;
 
+    copy = {1, 2, 3};
+    std::cout << std::endl << "Remove iterator at begin:";
+    auto it = copy.begin();
+    copy.remove(it);
+    assert(it == copy.begin());
+    assert(copy.length() == 2);
+    assert(copy == Sequence({2, 3}));
+    for (int i: copy)
+        std::cout << " " << i;
+
+    copy = {1, 2, 3};
+    std::cout << std::endl << "Remove iterator at middle:";
+    it = ++copy.begin();
+    copy.remove(it);
+    assert(it == copy.begin() + 1);
+    assert(copy.length() == 2);
+    assert(copy == Sequence({1, 3}));
+    for (int i: copy)
+        std::cout << " " << i;
+
+    copy = {1, 2, 3};
+    std::cout << std::endl << "Remove iterator at end:";
+    it = copy.begin() + 2;
+    copy.remove(it);
+    assert(it == copy.end());
+    assert(copy.length() == 2);
+    assert(copy == Sequence({1, 2}));
+    for (int i: copy)
+        std::cout << " " << i;
+
     std::cout << std::endl << "Remove all";
 
     copy.removeAll();
