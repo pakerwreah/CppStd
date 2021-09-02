@@ -111,6 +111,9 @@ TEST_CASE("Sequence - Equals") {
     CHECK(Sequence{1, 2, 3} == Sequence{1, 2, 3});
     CHECK_FALSE(Sequence{1, 2, -3} == Sequence{1, 2, 3});
 
+    CHECK(Sequence{1, 2, -3} != Sequence{1, 2, 3});
+    CHECK_FALSE(Sequence{1, 2, 3} != Sequence{1, 2, 3});
+
     int other[] = {1, 2, 3};
     CHECK(Sequence{1, 2, 3} == other);
     CHECK_FALSE(Sequence{1, 2, -3} == other);

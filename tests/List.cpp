@@ -175,6 +175,9 @@ TEST_CASE("List - Equals") {
     CHECK(List{1, 2, 3} == List{1, 2, 3});
     CHECK_FALSE(List{1, 2, -3} == List{1, 2, 3});
 
+    CHECK(List{1, 2, -3} != List{1, 2, 3});
+    CHECK_FALSE(List{1, 2, 3} != List{1, 2, 3});
+
     int other[] = {1, 2, 3};
     CHECK(List{1, 2, 3} == other);
     CHECK_FALSE(List{1, 2, -3} == other);

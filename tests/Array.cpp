@@ -73,6 +73,9 @@ TEST_CASE("Array - Equals") {
     CHECK(Array<int, 3>{1, 2, 3} == Array<int, 3>{1, 2, 3});
     CHECK_FALSE(Array<int, 3>{1, 2, -3} == Array<int, 3>{1, 2, 3});
 
+    CHECK(Array<int, 3>{1, 2, -3} != Array<int, 3>{1, 2, 3});
+    CHECK_FALSE(Array<int, 3>{1, 2, 3} != Array<int, 3>{1, 2, 3});
+
     int other[] = {1, 2, 3};
     CHECK(Array<int, 3>{1, 2, 3} == other);
     CHECK_FALSE(Array<int, 3>{1, 2, -3} == other);
