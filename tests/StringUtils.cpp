@@ -4,27 +4,58 @@
 
 #include "catch.hpp"
 #include "PK/StringUtils.h"
+#include "PK/Array.h"
+#include "PK/List.h"
 
 using namespace PK;
 
-#if false // TODO
-std::cout << std::endl << "#----- StringUtils -----#" << std::endl;
+TEST_CASE("StringUtils - Split") {
+    Sequence<String> expected = {"a", "bcd", "e"};
+    auto split = StringUtils::split("a.bcd..e.", ".");
+    CHECK(split == expected);
+}
 
-std::cout << "Split:";
+TEST_CASE("StringUtils - Join") {
 
-auto split = StringUtils::split("a.bcd..e.", ".");
-for (auto s: split)
-    std::cout << " " << s;
+    SECTION("String") {
+        String join;
 
-std::cout << std::endl;
+        SECTION("Sequence") {
+            Sequence<String> parts = {"a", "b", "c"};
+            join = StringUtils::join(parts, ",");
+        }
 
-Array<String, 3> array_parts = {"a", "b", "c"};
-Array<int, 3> array_parts_int = {1, 2, 3};
-std::cout << "Array join (String): " << StringUtils::join(array_parts, ",") << std::endl;
-std::cout << "Array join (int): " << StringUtils::join(array_parts_int, ",") << std::endl;
+        SECTION("Array") {
+            Array<String, 3> parts = {"a", "b", "c"};
+            join = StringUtils::join(parts, ",");
+        }
 
-List<String> list_parts = {"a", "b", "c"};
-List list_parts_int = {1, 2, 3};
-std::cout << "List join (String): " << StringUtils::join(list_parts, ",") << std::endl;
-std::cout << "List join (int): " << StringUtils::join(list_parts_int, ",") << std::endl;
-#endif
+        SECTION("List") {
+            List<String> parts = {"a", "b", "c"};
+            join = StringUtils::join(parts, ",");
+        }
+
+        CHECK(join == "a,b,c");
+    }
+
+    SECTION("Integer") {
+        String join;
+
+        SECTION("Sequence") {
+            Sequence parts = {1, 2, 3};
+            join = StringUtils::join(parts, ",");
+        }
+
+        SECTION("Array") {
+            Array<int, 3> parts = {1, 2, 3};
+            join = StringUtils::join(parts, ",");
+        }
+
+        SECTION("List") {
+            List parts = {1, 2, 3};
+            join = StringUtils::join(parts, ",");
+        }
+
+        CHECK(join == "1,2,3");
+    }
+}

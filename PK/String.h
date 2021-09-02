@@ -17,6 +17,7 @@ namespace PK {
 
         bool is_sso() const;
         char *alloc_or_sso(size_t length) const;
+        char *copy_if_sso(const String &other);
 
     public:
         String(const String &other);
@@ -28,7 +29,11 @@ namespace PK {
 
         String &operator=(const String &other);
         String &operator=(String &&other) noexcept;
-
-        operator const char *() { return data(); }
     };
+
+    bool operator==(const String &lhs, const char *rhs);
+    bool operator!=(const String &lhs, const char *rhs);
+    bool operator==(const char *lhs, const String &rhs);
+    bool operator!=(const char *lhs, const String &rhs);
+    std::ostream &operator<<(std::ostream &os, const String &string);
 }

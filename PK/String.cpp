@@ -4,12 +4,20 @@
 
 #include <cstring>
 #include "String.h"
+#include <ostream>
 
 namespace PK {
 
     String::String(const String &other) : String(other.m_data, other.m_length) {}
 
-    String::String(String &&other) noexcept: Sequence(std::move(other)) {}
+    String::String(String &&other) noexcept {
+
+        m_length = other.m_length;
+        m_data = copy_if_sso(other);
+
+        other.m_length = 0;
+        other.m_data = nullptr;
+    }
 
     String::String(const char *data) : String(data, strlen(data)) {}
 
@@ -31,10 +39,10 @@ namespace PK {
             if (!is_sso())
                 delete[] m_data;
 
-            m_length = other.length();
+            m_length = other.m_length;
             m_data = alloc_or_sso(m_length);
 
-            std::copy_n(other.data(), m_length, m_data);
+            std::copy_n(other.m_data, m_length, m_data);
         }
         return *this;
     }
@@ -45,8 +53,8 @@ namespace PK {
             if (!is_sso())
                 delete[] m_data;
 
-            m_length = other.length();
-            m_data = other.begin();
+            m_length = other.m_length;
+            m_data = copy_if_sso(other);
 
             other.m_length = 0;
             other.m_data = nullptr;
@@ -56,5 +64,25 @@ namespace PK {
 
     bool String::is_sso() const { return m_length <= sso_length; }
 
-    char *String::alloc_or_sso(size_t length) const { return length <= sso_length ? sso_begin : new char[length + 1]; }
+    char *String::alloc_or_sso(size_t length) const {
+        return length <= sso_length ? sso_begin : new char[length + 1];
+    }
+
+    char *String::copy_if_sso(const String &other) {
+        return static_cast<char *>(
+                other.is_sso()
+                ? std::memcpy(sso_data, other.sso_data, other.m_length + 1)
+                : other.m_data
+        );
+    }
+
+    bool operator==(const String &lhs, const char *rhs) { return std::strcmp(lhs.data(), rhs) == 0; }
+
+    bool operator!=(const String &lhs, const char *rhs) { return !(lhs == rhs); }
+
+    bool operator==(const char *lhs, const String &rhs) { return rhs == lhs; }
+
+    bool operator!=(const char *lhs, const String &rhs) { return rhs != lhs; }
+
+    std::ostream &operator<<(std::ostream &os, const PK::String &string) { return os << string.data(); }
 }

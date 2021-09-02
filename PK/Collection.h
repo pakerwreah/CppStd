@@ -49,6 +49,18 @@ namespace PK {
             return length() == other.length() && compare(other);
         }
 
+        template<size_t size>
+        bool operator!=(const T (&other)[size]) const {
+
+            return !this->template operator==(other);
+        }
+
+        template<typename I2>
+        bool operator!=(const Collection<T, I2> &other) const {
+
+            return !this->template operator==(other);
+        }
+
         virtual ~Collection() = default;
     };
 }

@@ -7,23 +7,142 @@
 
 using namespace PK;
 
-#if false // TODO
-std::cout << std::endl << "#----- String -----#" << std::endl;
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "modernize-loop-convert"
+#pragma ide diagnostic ignored "bugprone-use-after-move"
+#pragma ide diagnostic ignored "performance-unnecessary-copy-initialization"
 
-String text = "Hello, World!";
-std::cout << text << " - length: " << text.length() << std::endl;
+TEST_CASE("String - Loops") {
+    const char *expected = "Hello, World!";
+    String text = "Hello, World!";
 
-String text_copy = text;
-std::cout << "Copy: " << text_copy << " - length: " << text_copy.length() << std::endl;
+    SECTION("Range loop") {
+        int i = 0;
+        for (char c: text)
+            CHECK(c == expected[i++]);
+    }
 
-String text_move = std::move(text_copy);
-assert(!text_copy);
-std::cout << "Move: " << text_move << " - length: " << text_move.length() << std::endl;
+    SECTION("Index loop") {
+        for (int i = 0; i < text.length(); i++)
+            CHECK(text[i] == expected[i]);
+    }
 
-std::cout << "Range loop:";
+    SECTION("Iterator loop") {
+        int i = 0;
+        for (auto it = text.begin(); it != text.end(); it++)
+            CHECK(*it == expected[i++]);
+    }
+}
 
-for (char c: text)
-std::cout << " " << c;
+TEST_CASE("String - Constructors") {
+    const char *expected = "Hello, World!";
+    String text = "Hello, World!";
 
-std::cout << std::endl << "Join: " << StringUtils::join(text, " ") << std::endl;
-#endif
+    SECTION("Length") {
+        CHECK(text.length() == 13);
+    }
+
+    SECTION("Copy") {
+        String copy = text;
+
+        CHECK(copy.length() == 13);
+        CHECK(copy.begin() != text.begin());
+        CHECK(copy == expected);
+
+        CHECK(text.length() == 13);
+        CHECK(text.begin() != nullptr);
+    }
+
+    SECTION("Move - SSO") {
+        auto begin = text.begin();
+        String moved = std::move(text);
+
+        CHECK(moved.length() == 13);
+        CHECK(moved.begin() != begin);
+        CHECK(moved == expected);
+
+        CHECK(text.length() == 0);
+        CHECK(text.begin() == nullptr);
+    }
+
+    SECTION("Move") {
+        const char *long_expected = "Hello, World! Hello, World! Hello, World! Hello, World!";
+        String long_text = "Hello, World! Hello, World! Hello, World! Hello, World!";
+        auto begin = long_text.begin();
+        String moved = std::move(long_text);
+
+        CHECK(moved.length() == 55);
+        CHECK(moved.begin() == begin);
+        CHECK(moved == long_expected);
+
+        CHECK(long_text.length() == 0);
+        CHECK(long_text.begin() == nullptr);
+    }
+}
+
+TEST_CASE("String - Assignment") {
+    const char *expected = "Hello";
+    String text = "Hello";
+
+    SECTION("Copy") {
+        String copy = "";
+        copy = text;
+
+        CHECK(copy.begin() != text.begin());
+        CHECK(copy.length() == 5);
+        CHECK(copy == expected);
+
+        CHECK(text.begin() != nullptr);
+        CHECK(text.length() == 5);
+        CHECK(text == expected);
+    }
+
+    SECTION("Move - SSO") {
+        auto begin = text.begin();
+        String moved = "";
+        moved = std::move(text);
+
+        CHECK(moved.begin() != begin);
+        CHECK(moved.length() == 5);
+        CHECK(moved == expected);
+
+        CHECK(text.begin() == nullptr);
+        CHECK(text.length() == 0);
+    }
+
+    SECTION("Move") {
+        const char *long_expected = "Hello, World! Hello, World! Hello, World! Hello, World!";
+        String long_text = "Hello, World! Hello, World! Hello, World! Hello, World!";
+        auto begin = long_text.begin();
+        String moved = "";
+        moved = std::move(long_text);
+
+        CHECK(moved.begin() == begin);
+        CHECK(moved.length() == 55);
+        CHECK(moved == long_expected);
+
+        CHECK(long_text.begin() == nullptr);
+        CHECK(long_text.length() == 0);
+    }
+}
+
+TEST_CASE("String - Equals") {
+
+    CHECK(String("Hello") == String("Hello"));
+    CHECK(String("Hellu") != String("Hello"));
+    CHECK_FALSE(String("Hellu") == String("Hello"));
+
+    const char *other = "Hello";
+
+    CHECK(String("Hello") == other);
+    CHECK_FALSE(String("Hellu") == other);
+
+    CHECK(other == String("Hello"));
+    CHECK_FALSE(other == String("Hellu"));
+
+    CHECK(String("Hellu") != other);
+    CHECK_FALSE(String("Hello") != other);
+
+    CHECK(other != String("Hellu"));
+    CHECK_FALSE(other != String("Hello"));
+}

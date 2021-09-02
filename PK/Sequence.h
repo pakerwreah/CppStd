@@ -67,12 +67,12 @@ namespace PK {
         }
 
         template<typename I>
-        Sequence(const Collection <T, I> &other) : Sequence(other.length()) {
+        Sequence(const Collection<T, I> &other) : Sequence(other.length()) {
             std::copy(other.begin(), other.end(), m_data);
         }
 
         template<typename I>
-        Sequence(Collection <T, I> &&other) noexcept : Sequence(other.length()) {
+        Sequence(Collection<T, I> &&other) noexcept : Sequence(other.length()) {
             std::move(other.begin(), other.end(), m_data);
         }
 
