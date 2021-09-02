@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cstddef>
+#include <iterator>
 
 namespace PK {
 
@@ -22,19 +23,31 @@ namespace PK {
 
         T &operator[](int pos) { return *(this->begin() + pos); }
 
-        template<typename I2>
-        bool operator==(const Collection<T, I2> &other) const {
-
-            if (length() != other.length()) return false;
+    private:
+        template<typename O>
+        bool compare(const O &other) const {
 
             auto i1 = begin();
-            auto i2 = other.begin();
+            auto i2 = std::begin(other);
 
-            for (; i1 && i2; i1++, i2++)
+            for (; i1 != end(); i1++, i2++)
                 if (*i1 != *i2) return false;
 
             return true;
-        };
+        }
+
+    public:
+        template<size_t size>
+        bool operator==(const T (&other)[size]) const {
+
+            return length() == size && compare(other);
+        }
+
+        template<typename I2>
+        bool operator==(const Collection<T, I2> &other) const {
+
+            return length() == other.length() && compare(other);
+        }
 
         virtual ~Collection() = default;
     };

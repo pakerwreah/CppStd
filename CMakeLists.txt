@@ -3,6 +3,9 @@ project(Whatever)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB sources "PK/*.h" "PK/*.cpp")
+include_directories(.)
 
-add_executable(whatever main.cpp ${sources})
+file(GLOB sources "PK/*.h" "PK/*.cpp")
+file(GLOB tests "tests/*.cpp")
+
+add_executable(whatever ${sources} ${tests})

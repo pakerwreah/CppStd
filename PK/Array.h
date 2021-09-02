@@ -18,6 +18,12 @@ namespace PK {
         T *m_begin = m_data;
 
     public:
+        Array(const Array &&other) = delete;
+
+        Array(const Array &other) {
+            std::copy(other.begin(), other.end(), m_data);
+        }
+
         Array(std::initializer_list<T> items) {
             assert(items.size() == count);
             std::copy(items.begin(), items.end(), m_data);
