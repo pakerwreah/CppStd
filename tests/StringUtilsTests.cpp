@@ -10,7 +10,7 @@
 using namespace PK;
 
 TEST_CASE("StringUtils - Split") {
-    Sequence<String> expected = {"a", "bcd", "e"};
+    const String expected[] = {"a", "bcd", "e"};
     auto split = StringUtils::split("a.bcd..e.", ".");
     CHECK(split == expected);
 }

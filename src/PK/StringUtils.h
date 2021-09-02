@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Sequence.h"
+#include "List.h"
 #include "String.h"
 #include <sstream>
 
@@ -21,5 +21,5 @@ namespace PK::StringUtils {
         return os.str().c_str();
     }
 
-    Sequence<String> split(const String &string, const String &separator);
+    List<String> split(const String &string, const String &separator);
 }

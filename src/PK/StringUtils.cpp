@@ -3,11 +3,10 @@
 //
 
 #include "StringUtils.h"
-#include "List.h"
 
 namespace PK::StringUtils {
 
-    Sequence<String> split(const String &string, const String &separator) {
+    List<String> split(const String &string, const String &separator) {
 
         List<String> parts;
         char *token, *ptr = string.begin();
@@ -17,6 +16,6 @@ namespace PK::StringUtils {
                 parts.append(token);
         }
 
-        return std::move(parts);
+        return parts;
     }
 }
