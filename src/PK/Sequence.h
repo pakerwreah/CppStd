@@ -15,7 +15,6 @@ namespace PK {
         size_t m_length = 0;
         T *m_data = nullptr;
 
-    protected:
         Sequence(size_t length) {
             m_length = length;
             m_data = new T[m_length];
@@ -32,7 +31,7 @@ namespace PK {
             std::copy_n(data, length, m_data);
         }
 
-        Sequence(const Sequence &other) : Sequence(other.data(), other.length()) {}
+        Sequence(const Sequence &other) : Sequence(other.m_data, other.m_length) {}
 
         Sequence(Sequence &&other) noexcept: m_data(other.m_data), m_length(other.m_length) {
             other.m_length = 0;
@@ -44,10 +43,10 @@ namespace PK {
             if (&other != this) {
                 delete[] m_data;
 
-                m_length = other.length();
+                m_length = other.m_length;
                 m_data = new T[m_length];
 
-                std::copy_n(other.data(), m_length, m_data);
+                std::copy_n(other.m_data, m_length, m_data);
             }
             return *this;
         }
@@ -57,13 +56,20 @@ namespace PK {
             if (&other != this) {
                 delete[] m_data;
 
-                m_length = other.length();
-                m_data = other.begin();
+                m_length = other.m_length;
+                m_data = other.m_data;
 
                 other.m_length = 0;
                 other.m_data = nullptr;
             }
             return *this;
+        }
+
+        Sequence operator+(const Sequence &other) const {
+            Sequence result(m_length + other.m_length);
+            std::copy_n(m_data, m_length, result.m_data);
+            std::copy_n(other.m_data, other.m_length, result.m_data + m_length);
+            return result;
         }
 
         template<typename I>

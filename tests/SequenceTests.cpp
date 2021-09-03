@@ -106,6 +106,13 @@ TEST_CASE("Sequence - Assignment") {
     }
 }
 
+TEST_CASE("Sequence - Concat") {
+    int expected[] = {1, 2, 3, 4, 5};
+    Sequence sequence1 = {1, 2, 3};
+    Sequence sequence2 = {4, 5};
+    CHECK(sequence1 + sequence2 == expected);
+}
+
 TEST_CASE("Sequence - Equals") {
 
     CHECK(Sequence{1, 2, 3} == Sequence{1, 2, 3});
