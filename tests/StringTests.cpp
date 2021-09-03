@@ -139,17 +139,11 @@ TEST_CASE("String - Equals") {
     CHECK(String("Hellu") != String("Hello"));
     CHECK_FALSE(String("Hellu") == String("Hello"));
 
-    const char *other = "Hello";
+    const char *text = "Hello";
 
-    CHECK(String("Hello") == other);
-    CHECK_FALSE(String("Hellu") == other);
+    CHECK(String("Hello") == text);
+    CHECK_FALSE(String("Hellu") == text);
 
-    CHECK(other == String("Hello"));
-    CHECK_FALSE(other == String("Hellu"));
-
-    CHECK(String("Hellu") != other);
-    CHECK_FALSE(String("Hello") != other);
-
-    CHECK(other != String("Hellu"));
-    CHECK_FALSE(other != String("Hello"));
+    CHECK(String("Hellu") != text);
+    CHECK_FALSE(String("Hello") != text);
 }

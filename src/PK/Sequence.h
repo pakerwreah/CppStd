@@ -91,8 +91,6 @@ namespace PK {
             }
         }
 
-        const T *data() const { return m_data; }
-
         T *begin() const override { return m_data; }
 
         T *end() const override { return m_data + m_length; }

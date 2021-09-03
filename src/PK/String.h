@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include "Sequence.h"
+#include "StringView.h"
 
 namespace PK {
 
-    class String final : public Sequence<char> {
+    class String final : public StringView {
     private:
         // small string optimization
         static constexpr int sso_length = 50;
@@ -16,11 +16,13 @@ namespace PK {
         char *sso_begin = sso_data;
 
         bool is_sso() const;
-        char *alloc_or_sso(size_t length) const;
-        char *copy_if_sso(const String &other);
+        char *alloc_data_or_sso(size_t length) const;
+        char *copy_data_if_sso(const String &other);
+        void assign(const StringView &other);
 
     public:
         String(const String &other);
+        String(const StringView &other);
         String(String &&other) noexcept;
         String(const char *data = "");
         String(const char *data, size_t length);
@@ -28,13 +30,8 @@ namespace PK {
         ~String() override;
 
         String &operator=(const String &other);
+        String &operator=(const StringView &other);
         String &operator=(String &&other) noexcept;
-        String operator+(const String &other) const;
+        String operator+(const StringView &other) const;
     };
-
-    bool operator==(const String &lhs, const char *rhs);
-    bool operator!=(const String &lhs, const char *rhs);
-    bool operator==(const char *lhs, const String &rhs);
-    bool operator!=(const char *lhs, const String &rhs);
-    std::ostream &operator<<(std::ostream &os, const String &string);
 }

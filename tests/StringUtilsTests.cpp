@@ -6,6 +6,7 @@
 #include "PK/StringUtils.h"
 #include "PK/Array.h"
 #include "PK/List.h"
+#include "PK/Sequence.h"
 
 using namespace PK;
 
