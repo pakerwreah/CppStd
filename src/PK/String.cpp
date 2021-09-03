@@ -62,6 +62,17 @@ namespace PK {
         return *this;
     }
 
+    String String::operator+(const String &other) const {
+
+        size_t total_length = m_length + other.m_length;
+        char *result = alloc_or_sso(total_length);
+
+        std::copy_n(m_data, m_length, result);
+        std::copy_n(other.m_data, other.m_length + 1, result + m_length);
+
+        return {result, total_length};
+    }
+
     bool String::is_sso() const { return m_length <= sso_length; }
 
     char *String::alloc_or_sso(size_t length) const {

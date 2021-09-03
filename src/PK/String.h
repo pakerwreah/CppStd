@@ -29,6 +29,7 @@ namespace PK {
 
         String &operator=(const String &other);
         String &operator=(String &&other) noexcept;
+        String operator+(const String &other) const;
     };
 
     bool operator==(const String &lhs, const char *rhs);

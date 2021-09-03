@@ -126,6 +126,13 @@ TEST_CASE("String - Assignment") {
     }
 }
 
+TEST_CASE("String - Concat") {
+    const char *expected = "Hello, World!";
+    String text1 = "Hello";
+    String text2 = "World!";
+    CHECK(text1 + ", " + text2 == expected);
+}
+
 TEST_CASE("String - Equals") {
 
     CHECK(String("Hello") == String("Hello"));
