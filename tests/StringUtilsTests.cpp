@@ -3,6 +3,7 @@
 //
 
 #include "catch.hpp"
+#include "TestUtils.h"
 #include "PK/StringUtils.h"
 #include "PK/Array.h"
 #include "PK/List.h"

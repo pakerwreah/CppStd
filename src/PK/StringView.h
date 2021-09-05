@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Collection.h"
+#include <ostream>
 
 namespace PK {
 

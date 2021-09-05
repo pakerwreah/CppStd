@@ -3,6 +3,7 @@
 //
 
 #include "catch.hpp"
+#include "TestUtils.h"
 #include "PK/Sequence.h"
 
 using namespace PK;

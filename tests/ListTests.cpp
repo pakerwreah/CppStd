@@ -3,6 +3,7 @@
 //
 
 #include "catch.hpp"
+#include "TestUtils.h"
 #include "PK/List.h"
 
 using namespace PK;
