@@ -26,6 +26,12 @@ TEST_CASE("Sequence - Empty") {
     }
 }
 
+TEST_CASE("Sequence - Contains") {
+    Sequence sequence = {1, 2, 3};
+    CHECK(sequence.contains(2));
+    CHECK_FALSE(sequence.contains(5));
+}
+
 TEST_CASE("Sequence - Loops") {
     int expected[] = {1, 2, 3, 4, 5};
     Sequence sequence = {1, 2, 3, 4, 5};

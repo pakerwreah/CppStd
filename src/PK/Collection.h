@@ -19,6 +19,14 @@ namespace PK {
 
         bool isEmpty() const { return !length(); }
 
+        bool contains(const T &value) const {
+            for (const T &item: *this) {
+                if (item == value)
+                    return true;
+            }
+            return false;
+        }
+
         T operator[](int pos) const { return *(this->begin() + pos); }
 
         T &operator[](int pos) { return *(this->begin() + pos); }
