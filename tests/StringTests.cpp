@@ -85,7 +85,7 @@ TEST_CASE("String - Assignment") {
     String text = "Hello";
 
     SECTION("Copy") {
-        String copy = "";
+        String copy = "Hello World!";
         copy = text;
 
         CHECK(copy.begin() != text.begin());
@@ -99,7 +99,7 @@ TEST_CASE("String - Assignment") {
 
     SECTION("Move - SSO") {
         auto begin = text.begin();
-        String moved = "";
+        String moved = "Hello World!";
         moved = std::move(text);
 
         CHECK(moved.begin() != begin);

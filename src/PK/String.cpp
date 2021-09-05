@@ -47,7 +47,7 @@ namespace PK {
             m_length = other.length();
             m_data = alloc_data_or_sso(m_length);
 
-            std::copy_n(other.data(), m_length, m_data);
+            std::copy_n(other.data(), m_length + 1, m_data);
         }
         return *this;
     }
