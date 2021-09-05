@@ -16,13 +16,13 @@ using namespace PK;
 TEST_CASE("Sequence - Empty") {
     SECTION("YES") {
         Sequence<int> sequence;
-        CHECK(sequence.isEmpty());
+        CHECK(sequence.empty());
         CHECK(sequence.length() == 0);
     }
 
     SECTION("NO") {
         Sequence sequence = {1};
-        CHECK_FALSE(sequence.isEmpty());
+        CHECK_FALSE(sequence.empty());
         CHECK(sequence.length() == 1);
     }
 }

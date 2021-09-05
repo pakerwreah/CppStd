@@ -18,7 +18,7 @@ namespace PK {
 
         virtual size_t length() const = 0;
 
-        bool isEmpty() const { return !length(); }
+        [[nodiscard]] bool empty() const { return !length(); }
 
         bool contains(const T &value) const {
             for (const T &item: *this) {

@@ -14,13 +14,13 @@ using namespace PK;
 TEST_CASE("Array - Empty") {
     SECTION("YES") {
         Array<int, 0> array = {};
-        CHECK(array.isEmpty());
+        CHECK(array.empty());
         CHECK(array.length() == 0);
     }
 
     SECTION("NO") {
         Array<int, 1> array = {1};
-        CHECK_FALSE(array.isEmpty());
+        CHECK_FALSE(array.empty());
         CHECK(array.length() == 1);
     }
 }

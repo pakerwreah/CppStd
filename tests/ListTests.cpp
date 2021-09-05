@@ -17,13 +17,13 @@ TEST_CASE("List - Empty") {
 
     SECTION("YES") {
         List<int> list;
-        CHECK(list.isEmpty());
+        CHECK(list.empty());
         CHECK(list.length() == 0);
     }
 
     SECTION("NO") {
         List list = {1};
-        CHECK_FALSE(list.isEmpty());
+        CHECK_FALSE(list.empty());
         CHECK(list.length() == 1);
     }
 }
