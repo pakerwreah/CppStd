@@ -10,6 +10,10 @@
 
 namespace PK::StringUtils {
 
+    String to_string(bool value);
+    String to_string(int value);
+    String to_string(double value, int precision);
+
     template<typename T, typename I>
     String join(const Collection<T, I> &items, const char *glue) {
         std::ostringstream os;

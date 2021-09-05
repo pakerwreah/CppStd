@@ -3,6 +3,7 @@
 //
 
 #include "StringUtils.h"
+#include <iomanip>
 
 namespace PK::StringUtils {
 
@@ -17,5 +18,15 @@ namespace PK::StringUtils {
         }
 
         return parts;
+    }
+
+    String to_string(bool value) { return value ? "true" : "false"; }
+
+    String to_string(int value) { return std::to_string(value).c_str(); }
+
+    String to_string(double value, int precision) {
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(precision) << value;
+        return stream.str().c_str();
     }
 }
