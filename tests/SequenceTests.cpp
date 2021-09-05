@@ -122,6 +122,10 @@ TEST_CASE("Sequence - Concat") {
 
 TEST_CASE("Sequence - Equals") {
 
+    Sequence sequence = {1, 2, 3};
+    CHECK(sequence == sequence);
+    CHECK_FALSE(sequence != sequence);
+
     CHECK(Sequence{1, 2, 3} == Sequence{1, 2, 3});
     CHECK_FALSE(Sequence{1, 2, -3} == Sequence{1, 2, 3});
 

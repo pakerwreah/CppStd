@@ -15,6 +15,7 @@ TEST_CASE("StringUtils - Convert") {
     CHECK(StringUtils::to_string(123) == "123");
     CHECK(StringUtils::to_string(1.23, 2) == "1.23");
     CHECK(StringUtils::to_string(true) == "true");
+    CHECK(StringUtils::to_string(false) == "false");
 }
 TEST_CASE("StringUtils - Split") {
     const String expected[] = {"a", "bcd", "e"};

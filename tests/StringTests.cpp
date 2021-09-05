@@ -42,6 +42,13 @@ TEST_CASE("String - Constructors") {
         CHECK(text.length() == 13);
     }
 
+    SECTION("StringView") {
+        String copy = StringView("Hello, World!");
+        CHECK(copy.length() == 13);
+        CHECK(copy.begin() != text.begin());
+        CHECK(copy == expected);
+    }
+
     SECTION("Copy") {
         String copy = text;
 
@@ -81,48 +88,88 @@ TEST_CASE("String - Constructors") {
 }
 
 TEST_CASE("String - Assignment") {
-    const char *expected = "Hello";
-    String text = "Hello";
 
-    SECTION("Copy") {
+    SECTION("Copy - SSO <- SSO") {
+        String text = "Hello";
         String copy = "Hello World!";
         copy = text;
 
         CHECK(copy.begin() != text.begin());
         CHECK(copy.length() == 5);
-        CHECK(copy == expected);
+        CHECK(copy == "Hello");
 
         CHECK(text.begin() != nullptr);
         CHECK(text.length() == 5);
-        CHECK(text == expected);
+        CHECK(text == "Hello");
     }
 
-    SECTION("Move - SSO") {
-        auto begin = text.begin();
-        String moved = "Hello World!";
-        moved = std::move(text);
+    SECTION("Copy - Long <- SSO") {
+        String copy = "Hello, World! Hello, World! Hello, World! Hello, World!";
+        String other = "Hello, World!";
+        copy = other;
 
-        CHECK(moved.begin() != begin);
-        CHECK(moved.length() == 5);
-        CHECK(moved == expected);
+        CHECK(copy.begin() != other.begin());
+        CHECK(copy.length() == 13);
+        CHECK(copy == "Hello, World!");
+
+        CHECK(other.begin() != nullptr);
+        CHECK(other.length() == 13);
+        CHECK(other == "Hello, World!");
+    }
+
+    SECTION("Copy - Long <- Long") {
+        String copy = "Hello, World! Hello, World! Hello, World! Hello, World!";
+        String other = "Hello, World! Hello, World! Hello, World! Hello, World! Copy";
+        copy = other;
+
+        CHECK(copy.begin() != other.begin());
+        CHECK(copy.length() == 60);
+        CHECK(copy == "Hello, World! Hello, World! Hello, World! Hello, World! Copy");
+
+        CHECK(other.begin() != nullptr);
+        CHECK(other.length() == 60);
+        CHECK(other == "Hello, World! Hello, World! Hello, World! Hello, World! Copy");
+    }
+
+    SECTION("Move - SSO <- SSO") {
+        String text = "Hello";
+        String copy = "Hello World!";
+        copy = std::move(text);
+
+        CHECK(copy.begin() != text.begin());
+        CHECK(copy.length() == 5);
+        CHECK(copy == "Hello");
 
         CHECK(text.begin() == nullptr);
         CHECK(text.length() == 0);
     }
 
-    SECTION("Move") {
-        const char *long_expected = "Hello, World! Hello, World! Hello, World! Hello, World!";
-        String long_text = "Hello, World! Hello, World! Hello, World! Hello, World!";
-        auto begin = long_text.begin();
-        String moved = "";
-        moved = std::move(long_text);
+    SECTION("Move - Long <- SSO") {
+        String other = "Hello, World!";
+        auto begin = other.begin();
+        String moved = "Hello, World! Hello, World! Hello, World! Hello, World!";
+        moved = std::move(other);
+
+        CHECK(moved.begin() != begin);
+        CHECK(moved.length() == 13);
+        CHECK(moved == "Hello, World!");
+
+        CHECK(other.begin() == nullptr);
+        CHECK(other.length() == 0);
+    }
+
+    SECTION("Move - Long <- Long") {
+        String other = "Hello, World! Hello, World! Hello, World! Hello, World! Move";
+        auto begin = other.begin();
+        String moved = "Hello, World! Hello, World! Hello, World! Hello, World!";
+        moved = std::move(other);
 
         CHECK(moved.begin() == begin);
-        CHECK(moved.length() == 55);
-        CHECK(moved == long_expected);
+        CHECK(moved.length() == 60);
+        CHECK(moved == "Hello, World! Hello, World! Hello, World! Hello, World! Move");
 
-        CHECK(long_text.begin() == nullptr);
-        CHECK(long_text.length() == 0);
+        CHECK(other.begin() == nullptr);
+        CHECK(other.length() == 0);
     }
 }
 

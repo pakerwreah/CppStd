@@ -9,3 +9,7 @@ file(GLOB sources "src/PK/*.h" "src/PK/*.cpp")
 file(GLOB tests "tests/*.h" "tests/*.cpp")
 
 add_executable(whatever ${sources} ${tests})
+
+# Configure code coverage
+include(CodeCoverage.cmake)
+target_link_libraries(whatever coverage_config)

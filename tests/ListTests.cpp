@@ -14,6 +14,7 @@ using namespace PK;
 #pragma ide diagnostic ignored "performance-unnecessary-copy-initialization"
 
 TEST_CASE("List - Empty") {
+
     SECTION("YES") {
         List<int> list;
         CHECK(list.isEmpty());
