@@ -47,4 +47,20 @@ TEST_CASE("HashMap") {
         CHECK(map.keys().length() == 3);
         CHECK(map.values().length() == 3);
     }
+
+    SECTION("Capacity") {
+        CHECK(map.capacity() == 16);
+        CHECK(map.length() == 3);
+
+        for (int i = 4; i <= 12; i++)
+            map.set("Key " + StringUtils::to_string(i), "Value " + StringUtils::to_string(i));
+
+        CHECK(map.capacity() == 16);
+        CHECK(map.length() == 12);
+
+        map.set("Key 14", "Value 14");
+
+        CHECK(map.capacity() == 32);
+        CHECK(map.length() == 13);
+    }
 }

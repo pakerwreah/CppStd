@@ -27,8 +27,42 @@ namespace PK {
         };
 
         size_t m_length = 0;
-        size_t capacity = 16;
-        List<HashNode> **map = new List<HashNode> *[capacity];
+        size_t m_capacity = 16;
+        List<HashNode> **map = alloc(m_capacity);
+
+        List<HashNode> **alloc(size_t capacity) const {
+
+            auto **new_map = new List<HashNode> *[capacity];
+
+            for (int i = 0; i < capacity; i++)
+                new_map[i] = nullptr;
+
+            return new_map;
+        }
+
+        void resize(size_t new_capacity) {
+
+            List<HashNode> **new_map = alloc(new_capacity);
+
+            size_t copied = 0;
+            for (int i = 0; i < m_capacity && copied < m_length; i++) {
+                if (!map[i]) continue;
+                for (const HashNode &node: *map[i]) {
+
+                    size_t new_pos = node.hash % new_capacity;
+                    List<HashNode> *list = new_map[new_pos];
+
+                    if (!list) new_map[new_pos] = (list = new List<HashNode>);
+                    list->append(node);
+                    copied++;
+                }
+            }
+
+            m_capacity = new_capacity;
+
+            delete[] map;
+            map = new_map;
+        }
 
         V *find(const K &key, size_t pos) const {
 
@@ -45,15 +79,12 @@ namespace PK {
         }
 
     public:
-        HashMap() {
-            for (int i = 0; i < capacity; i++)
-                map[i] = nullptr;
-        }
-
         size_t length() const { return m_length; }
 
+        size_t capacity() const { return m_capacity; }
+
         V *find(const K &key) const {
-            return find(key, Hash::make(key) % capacity);
+            return find(key, Hash::make(key) % m_capacity);
         }
 
         V &operator[](const K &key) const {
@@ -68,11 +99,18 @@ namespace PK {
 
         void set(const K &key, const V &value) {
 
-            size_t pos = Hash::make(key) % capacity;
+            size_t hash = Hash::make(key);
+            size_t pos = hash % m_capacity;
 
             if (auto *item = find(key, pos)) {
                 *item = value;
                 return;
+            }
+
+            if (m_length >= m_capacity * 0.75) {
+                size_t new_capacity = m_capacity * 2;
+                resize(new_capacity);
+                pos = hash % new_capacity;
             }
 
             List<HashNode> *list = map[pos];
@@ -84,7 +122,7 @@ namespace PK {
 
         List<Entry> entries() const {
             List<Entry> entries;
-            for (int i = 0; i < capacity; i++) {
+            for (int i = 0; i < m_capacity; i++) {
                 if (!map[i]) continue;
                 for (const Entry &entry: *map[i])
                     entries.append(entry);
