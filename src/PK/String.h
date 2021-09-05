@@ -18,7 +18,8 @@ namespace PK {
         bool is_sso() const;
         char *alloc_data_or_sso(size_t length) const;
         char *copy_data_if_sso(const String &other);
-        void assign(const StringView &other);
+
+        String(size_t length);
 
     public:
         String(const String &other);
@@ -30,8 +31,7 @@ namespace PK {
         ~String() override;
 
         String &operator=(const String &other);
-        String &operator=(const StringView &other);
         String &operator=(String &&other) noexcept;
-        String operator+(const StringView &other) const;
+        friend String operator+(const StringView &lhs, const StringView &rhs);
     };
 }

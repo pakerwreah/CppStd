@@ -65,10 +65,13 @@ namespace PK {
             return *this;
         }
 
-        Sequence operator+(const Sequence &other) const {
-            Sequence result(m_length + other.m_length);
-            std::copy_n(m_data, m_length, result.m_data);
-            std::copy_n(other.m_data, other.m_length, result.m_data + m_length);
+        friend Sequence operator+(const Sequence &lhs, const Sequence &rhs) {
+
+            Sequence result(lhs.length() + rhs.length());
+
+            std::copy_n(lhs.begin(), lhs.length(), result.begin());
+            std::copy_n(rhs.begin(), rhs.length(), result.begin() + lhs.length());
+
             return result;
         }
 

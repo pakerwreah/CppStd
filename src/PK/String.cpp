@@ -21,12 +21,15 @@ namespace PK {
         other.m_data = nullptr;
     }
 
-    String::String(const char *data) : String(data, strlen(data)) {}
-
-    String::String(const char *data, size_t length) {
+    String::String(size_t length) {
         m_length = length;
         m_data = alloc_data_or_sso(m_length);
         m_data[length] = '\0';
+    }
+
+    String::String(const char *data) : String(data, strlen(data)) {}
+
+    String::String(const char *data, size_t length) : String(length) {
         std::memcpy(m_data, data, length);
     }
 
@@ -35,24 +38,17 @@ namespace PK {
             m_data = nullptr;
     }
 
-    void String::assign(const StringView &other) {
-
-        if (!is_sso())
-            delete[] m_data;
-
-        m_length = other.length();
-        m_data = alloc_data_or_sso(m_length);
-
-        std::copy_n(other.data(), m_length, m_data);
-    }
-
     String &String::operator=(const String &other) {
-        if (&other != this) assign(other);
-        return *this;
-    }
 
-    String &String::operator=(const StringView &other) {
-        if (&other != this) assign(other);
+        if (&other != this) {
+            if (!is_sso())
+                delete[] m_data;
+
+            m_length = other.length();
+            m_data = alloc_data_or_sso(m_length);
+
+            std::copy_n(other.data(), m_length, m_data);
+        }
         return *this;
     }
 
@@ -71,15 +67,14 @@ namespace PK {
         return *this;
     }
 
-    String String::operator+(const StringView &other) const {
+    String operator+(const StringView &lhs, const StringView &rhs) {
 
-        size_t total_length = m_length + other.length();
-        char *result = alloc_data_or_sso(total_length);
+        String result(lhs.length() + rhs.length());
 
-        std::copy_n(m_data, m_length, result);
-        std::copy_n(other.data(), other.length() + 1, result + m_length);
+        std::copy_n(lhs.data(), lhs.length(), result.begin());
+        std::copy_n(rhs.data(), rhs.length() + 1, result.begin() + lhs.length());
 
-        return {result, total_length};
+        return result;
     }
 
     bool String::is_sso() const { return m_length <= sso_length; }
