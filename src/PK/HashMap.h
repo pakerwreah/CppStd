@@ -30,6 +30,20 @@ namespace PK {
         size_t capacity = 16;
         List<HashNode> **map = new List<HashNode> *[capacity];
 
+        V *find(const K &key, size_t pos) const {
+
+            const List<HashNode> *list = map[pos];
+
+            if (list) {
+                for (Entry &entry: *list) {
+                    if (entry.key == key)
+                        return &entry.value;
+                }
+            }
+
+            return nullptr;
+        }
+
     public:
         HashMap() {
             for (int i = 0; i < capacity; i++)
@@ -39,15 +53,7 @@ namespace PK {
         size_t length() const { return m_length; }
 
         V *find(const K &key) const {
-            size_t pos = Hash::make(key) % capacity;
-            const List<HashNode> *list = map[pos];
-            if (list) {
-                for (Entry &entry: *list) {
-                    if (entry.key == key)
-                        return &entry.value;
-                }
-            }
-            return nullptr;
+            return find(key, Hash::make(key) % capacity);
         }
 
         V &operator[](const K &key) const {
@@ -63,10 +69,17 @@ namespace PK {
         void set(const K &key, const V &value) {
 
             size_t pos = Hash::make(key) % capacity;
+
+            if (auto *item = find(key, pos)) {
+                *item = value;
+                return;
+            }
+
             List<HashNode> *list = map[pos];
             if (!list) map[pos] = (list = new List<HashNode>);
 
             list->append({key, value});
+            m_length++;
         }
 
         List<Entry> entries() const {
