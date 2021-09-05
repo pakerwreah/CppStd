@@ -42,6 +42,8 @@ namespace PK {
         template<typename I2>
         bool equals(const Collection<T, I2> &other) const {
 
+            if (&other == this) return true;
+
             if (length() != other.length()) return false;
 
             auto i1 = begin();

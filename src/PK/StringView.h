@@ -23,6 +23,10 @@ namespace PK {
         const char *data() const;
         size_t length() const override;
 
+        StringView substring(size_t start, size_t length) const;
+        int indexOf(const StringView &other) const;
+        bool contains(const StringView &other) const;
+
         char *begin() const override;
         char *end() const override;
     };
