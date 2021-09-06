@@ -5,19 +5,33 @@
 #pragma once
 
 #include "Collection.h"
-#include "NodeIterator.h"
+#include "ListIterator.h"
 #include <initializer_list>
 
 namespace PK {
 
     template<typename T>
-    class List final : public Collection<T, NodeIterator<T>> {
+    class List final : public Collection<T, ListIterator<T>> {
     private:
-        using Iterator = NodeIterator<T>;
+        using Iterator = ListIterator<T>;
+        using Node = typename Iterator::Node;
 
-        Node<T> *m_begin = nullptr;
-        Node<T> *m_end = nullptr;
+        Node *m_begin = nullptr;
+        Node *m_end = nullptr;
         size_t m_length = 0;
+
+        void removeNode(Node *&ptr) {
+
+            *(ptr->next ? &ptr->next->prev : &m_end) = ptr->prev;
+            *(ptr->prev ? &ptr->prev->next : &m_begin) = ptr->next;
+
+            auto next = ptr->next;
+
+            delete ptr;
+            ptr = next;
+
+            m_length--;
+        }
 
     public:
         List() = default;
@@ -74,10 +88,11 @@ namespace PK {
         size_t length() const override { return m_length; }
 
         void removeAll() {
+
             for (auto ptr = m_begin; ptr;) {
-                auto tmp = ptr;
-                ptr = ptr->next;
-                delete tmp;
+                auto next = ptr->next;
+                delete ptr;
+                ptr = next;
             }
             m_begin = nullptr;
             m_end = nullptr;
@@ -86,50 +101,23 @@ namespace PK {
 
         void removeAt(size_t pos) {
 
-            if (pos == 0) {
-                auto tmp = m_begin;
-                m_begin = tmp->next;
-                delete tmp;
-                m_length--;
-                return;
-            }
-
             auto ptr = m_begin;
-            auto next = ptr->next;
-            for (--pos; next && pos; pos--) {
-                ptr = ptr->next;
-                next = next->next;
-            }
-
-            if (next) {
-                ptr->next = next->next;
-                delete next;
-                m_length--;
-            }
+            while (pos--) ptr = ptr->next;
+            removeNode(ptr);
         }
 
-        void remove(Iterator &iterator) {
-
-            auto it = begin();
-            size_t i = 0;
-
-            for (; it && it != iterator; it++, i++);
-
-            if (it) {
-                iterator = ++it;
-                removeAt(i);
-            }
-        }
+        void remove(Iterator &iterator) { removeNode(iterator.m_ptr); }
 
         void append(const T &item) {
 
-            auto new_node = new Node<T>{item};
+            auto new_node = new Node{item};
 
             if (!m_begin) {
                 m_begin = new_node;
                 m_end = m_begin;
             } else {
                 m_end->next = new_node;
+                new_node->prev = m_end;
                 m_end = new_node;
             }
 

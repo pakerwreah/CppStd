@@ -56,7 +56,7 @@ TEST_CASE("List - Constructors") {
 
     SECTION("Copy") {
         List copy = list;
-        CHECK(list.begin() != nullptr);
+        CHECK(list.begin());
         CHECK(list.length() == 3);
         CHECK(copy.length() == 3);
         CHECK(list == expected);
@@ -66,7 +66,7 @@ TEST_CASE("List - Constructors") {
     SECTION("Move") {
         auto begin = list.begin();
         List moved = std::move(list);
-        CHECK(list.begin() == nullptr);
+        CHECK_FALSE(list.begin());
         CHECK(list.length() == 0);
         CHECK(moved.begin() == begin);
         CHECK(moved.length() == 3);
@@ -88,7 +88,7 @@ TEST_CASE("List - Assignment") {
     SECTION("Copy") {
         List copy = {0};
         copy = list;
-        CHECK(list.begin() != nullptr);
+        CHECK(list.begin());
         CHECK(copy.begin() != list.begin());
         CHECK(list.length() == 3);
         CHECK(copy.length() == 3);
@@ -100,7 +100,7 @@ TEST_CASE("List - Assignment") {
         auto begin = list.begin();
         List moved = {0};
         moved = std::move(list);
-        CHECK(list.begin() == nullptr);
+        CHECK_FALSE(list.begin());
         CHECK(list.length() == 0);
         CHECK(moved.begin() == begin);
         CHECK(moved.length() == 3);
@@ -122,7 +122,6 @@ TEST_CASE("List - Remove") {
             auto it = list.begin();
             list.remove(it);
             CHECK(it);
-            CHECK(it != nullptr);
         }
 
         CHECK(list.length() == 2);
@@ -140,7 +139,6 @@ TEST_CASE("List - Remove") {
             auto it = list.begin() + 1;
             list.remove(it);
             CHECK(it);
-            CHECK(it != nullptr);
         }
 
         CHECK(list.length() == 2);
@@ -158,7 +156,6 @@ TEST_CASE("List - Remove") {
             auto it = list.begin() + 2;
             list.remove(it);
             CHECK_FALSE(it);
-            CHECK(it == nullptr);
         }
 
         CHECK(list.length() == 2);
@@ -167,7 +164,7 @@ TEST_CASE("List - Remove") {
 
     SECTION("All") {
         list.removeAll();
-        CHECK(list.begin() == nullptr);
+        CHECK_FALSE(list.begin());
         CHECK(list.length() == 0);
     }
 }
