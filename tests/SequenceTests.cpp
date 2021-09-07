@@ -14,6 +14,7 @@ using namespace PK;
 #pragma ide diagnostic ignored "performance-unnecessary-copy-initialization"
 
 TEST_CASE("Sequence - Empty") {
+
     SECTION("YES") {
         Sequence<int> sequence;
         CHECK(sequence.empty());
@@ -120,21 +121,36 @@ TEST_CASE("Sequence - Concat") {
     CHECK(sequence1 + sequence2 == expected);
 }
 
-TEST_CASE("Sequence - Equals") {
+TEST_CASE("Sequence - Compare") {
 
     Sequence sequence = {1, 2, 3};
-    CHECK(sequence == sequence);
-    CHECK_FALSE(sequence != sequence);
 
-    CHECK(Sequence{1, 2, 3} == Sequence{1, 2, 3});
-    CHECK_FALSE(Sequence{1, 2, -3} == Sequence{1, 2, 3});
+    SECTION("Equals") {
+        CHECK(sequence == sequence);
+        CHECK_FALSE(sequence != sequence);
 
-    CHECK(Sequence{1, 2, -3} != Sequence{1, 2, 3});
-    CHECK_FALSE(Sequence{1, 2, 3} != Sequence{1, 2, 3});
+        CHECK(Sequence{1, 2, 3} == sequence);
+        CHECK_FALSE(Sequence{1, 2, -3} == sequence);
 
-    int other[] = {1, 2, 3};
-    CHECK(Sequence{1, 2, 3} == other);
-    CHECK_FALSE(Sequence{1, 2, -3} == other);
+        CHECK(Sequence{1, 2, -3} != sequence);
+        CHECK_FALSE(Sequence{1, 2, 3} != sequence);
+    }
+
+    SECTION("Less") {
+        CHECK(Sequence{1, 2} < sequence);
+        CHECK(Sequence{1, 2, 2} < sequence);
+        CHECK_FALSE(Sequence{1, 2, 3} < sequence);
+        CHECK_FALSE(Sequence{1, 2, 4} < sequence);
+        CHECK_FALSE(Sequence{1, 2, 3, 4} < sequence);
+    }
+}
+
+TEST_CASE("Sequence - Sort") {
+
+    int expected[] = {1, 2, 3, 4, 5};
+    Sequence sequence = {4, 3, 5, 1, 2};
+
+    CHECK(sequence.sorted() == expected);
 }
 
 #pragma clang diagnostic pop

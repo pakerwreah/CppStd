@@ -53,6 +53,17 @@ TEST_CASE("StringView - Equals") {
     }
 }
 
+TEST_CASE("StringView - Less") {
+
+    StringView string = "Hello";
+
+    CHECK(StringView("Hell") < string);
+    CHECK(StringView("Helli") < string);
+    CHECK_FALSE(StringView("Hello") < string);
+    CHECK_FALSE(StringView("Hellu") < string);
+    CHECK_FALSE(StringView("Hello!") < string);
+}
+
 TEST_CASE("StringView - Substring") {
 
     StringView string = "Hello World!";

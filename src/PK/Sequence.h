@@ -38,6 +38,13 @@ namespace PK {
             other.m_data = nullptr;
         }
 
+        Sequence sorted() const {
+
+            Sequence sequence(*this);
+            std::sort(sequence.begin(), sequence.end());
+            return sequence;
+        }
+
         Sequence &operator=(const Sequence &other) {
 
             if (&other != this) {

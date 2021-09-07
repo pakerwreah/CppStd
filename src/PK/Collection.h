@@ -38,6 +38,23 @@ namespace PK {
         template<typename I2>
         bool operator!=(const Collection<T, I2> &other) const { return !equals(other); }
 
+        template<typename I2>
+        bool operator<(const Collection<T, I2> &other) const {
+
+            if (&other == this) return false;
+
+            if (length() > other.length()) return false;
+            if (length() < other.length()) return true;
+
+            auto i1 = begin();
+            auto i2 = other.begin();
+
+            for (; i1 != end(); i1++, i2++)
+                if (*i1 != *i2) return *i1 < *i2;
+
+            return false;
+        }
+
     private:
         template<typename I2>
         bool equals(const Collection<T, I2> &other) const {
