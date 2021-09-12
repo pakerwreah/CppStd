@@ -123,5 +123,29 @@ namespace PK {
                 m_end = new_node;
             }
         }
+
+        void insert(const T &item, size_t pos) {
+
+            m_length++;
+
+            auto new_node = new Node{item};
+
+            auto ptr = m_begin;
+            while (pos--) ptr = ptr->next;
+
+            if (ptr == m_begin) {
+                m_begin = new_node;
+            } else if (ptr) {
+                new_node->prev = ptr->prev;
+                ptr->prev->next = new_node;
+            }
+
+            if (ptr) {
+                new_node->next = ptr;
+                ptr->prev = new_node;
+            } else {
+                m_end = new_node;
+            }
+        }
     };
 }

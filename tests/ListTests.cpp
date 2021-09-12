@@ -192,6 +192,55 @@ TEST_CASE("List - Append") {
     }
 }
 
+TEST_CASE("List - Insert") {
+
+    SECTION("Empty") {
+        int expected[] = {1};
+        List<int> list;
+
+        list.insert(1, 0);
+
+        CHECK(list.length() == 1);
+        CHECK(list == expected);
+    }
+
+    SECTION("Begin") {
+        List list = {2, 3};
+        int expected[] = {1, 2, 3};
+
+        CHECK(list.length() == 2);
+
+        list.insert(1, 0);
+
+        CHECK(list.length() == 3);
+        CHECK(list == expected);
+    }
+
+    SECTION("Middle") {
+        List list = {1, 3};
+        int expected[] = {1, 2, 3};
+
+        CHECK(list.length() == 2);
+
+        list.insert(2, 1);
+
+        CHECK(list.length() == 3);
+        CHECK(list == expected);
+    }
+
+    SECTION("End") {
+        List list = {1, 2};
+        int expected[] = {1, 2, 3};
+
+        CHECK(list.length() == 2);
+
+        list.insert(3, 2);
+
+        CHECK(list.length() == 3);
+        CHECK(list == expected);
+    }
+}
+
 TEST_CASE("List - Equals") {
 
     CHECK(List{1, 2, 3} == List{1, 2, 3});
