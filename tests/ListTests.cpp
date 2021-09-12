@@ -169,6 +169,29 @@ TEST_CASE("List - Remove") {
     }
 }
 
+TEST_CASE("List - Append") {
+
+    SECTION("Empty") {
+        int expected[] = {1};
+        List<int> list;
+
+        list.append(1);
+
+        CHECK(list.length() == 1);
+        CHECK(list == expected);
+    }
+
+    SECTION("Not empty") {
+        int expected[] = {1, 2};
+        List list = {1};
+
+        list.append(2);
+
+        CHECK(list.length() == 2);
+        CHECK(list == expected);
+    }
+}
+
 TEST_CASE("List - Equals") {
 
     CHECK(List{1, 2, 3} == List{1, 2, 3});

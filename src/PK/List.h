@@ -110,18 +110,18 @@ namespace PK {
 
         void append(const T &item) {
 
+            m_length++;
+
             auto new_node = new Node{item};
 
             if (!m_begin) {
                 m_begin = new_node;
-                m_end = m_begin;
+                m_end = new_node;
             } else {
                 m_end->next = new_node;
                 new_node->prev = m_end;
                 m_end = new_node;
             }
-
-            m_length++;
         }
     };
 }
