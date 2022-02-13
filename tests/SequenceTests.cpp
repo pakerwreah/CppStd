@@ -13,144 +13,147 @@ using namespace PK;
 #pragma ide diagnostic ignored "bugprone-use-after-move"
 #pragma ide diagnostic ignored "performance-unnecessary-copy-initialization"
 
-TEST_CASE("Sequence - Empty") {
+TEST_CASE("Sequence") {
 
-    SECTION("YES") {
-        Sequence<int> sequence;
-        CHECK(sequence.empty());
-        CHECK(sequence.length() == 0);
+    SECTION("Empty") {
+
+        SECTION("YES") {
+            Sequence<int> sequence;
+            CHECK(sequence.empty());
+            CHECK(sequence.length() == 0);
+        }
+
+        SECTION("NO") {
+            Sequence sequence = {1};
+            CHECK_FALSE(sequence.empty());
+            CHECK(sequence.length() == 1);
+        }
     }
 
-    SECTION("NO") {
-        Sequence sequence = {1};
-        CHECK_FALSE(sequence.empty());
-        CHECK(sequence.length() == 1);
-    }
-}
-
-TEST_CASE("Sequence - Contains") {
-    Sequence sequence = {1, 2, 3};
-    CHECK(sequence.contains(2));
-    CHECK_FALSE(sequence.contains(5));
-}
-
-TEST_CASE("Sequence - Loops") {
-    int expected[] = {1, 2, 3, 4, 5};
-    Sequence sequence = {1, 2, 3, 4, 5};
-
-    SECTION("Range loop") {
-        int i = 0;
-        for (int s: sequence)
-            CHECK(s == expected[i++]);
+    SECTION("Contains") {
+        Sequence sequence = {1, 2, 3};
+        CHECK(sequence.contains(2));
+        CHECK_FALSE(sequence.contains(5));
     }
 
-    SECTION("Index loop") {
-        for (int i = 0; i < sequence.length(); i++)
-            CHECK(sequence[i] == expected[i]);
+    SECTION("Loops") {
+        int expected[] = {1, 2, 3, 4, 5};
+        Sequence sequence = {1, 2, 3, 4, 5};
+
+        SECTION("Range loop") {
+            int i = 0;
+            for (int s: sequence)
+                CHECK(s == expected[i++]);
+        }
+
+        SECTION("Index loop") {
+            for (int i = 0; i < sequence.length(); i++)
+                CHECK(sequence[i] == expected[i]);
+        }
+
+        SECTION("Iterator loop") {
+            int i = 0;
+            for (auto it = sequence.begin(); it != sequence.end(); it++)
+                CHECK(*it == expected[i++]);
+        }
     }
 
-    SECTION("Iterator loop") {
-        int i = 0;
-        for (auto it = sequence.begin(); it != sequence.end(); it++)
-            CHECK(*it == expected[i++]);
+    SECTION("Constructors") {
+        int expected[] = {1, 2, 3};
+        Sequence sequence = {1, 2, 3};
+
+        SECTION("Copy") {
+            Sequence copy = sequence;
+            CHECK(sequence.begin() != nullptr);
+            CHECK(sequence.length() == 3);
+            CHECK(copy.length() == 3);
+            CHECK(sequence == expected);
+            CHECK(copy == expected);
+        }
+
+        SECTION("Move") {
+            auto begin = sequence.begin();
+            Sequence moved = std::move(sequence);
+            CHECK(sequence.begin() == nullptr);
+            CHECK(sequence.length() == 0);
+            CHECK(moved.begin() == begin);
+            CHECK(moved.length() == 3);
+            CHECK(moved == expected);
+        }
     }
-}
 
-TEST_CASE("Sequence - Constructors") {
-    int expected[] = {1, 2, 3};
-    Sequence sequence = {1, 2, 3};
-
-    SECTION("Copy") {
-        Sequence copy = sequence;
-        CHECK(sequence.begin() != nullptr);
-        CHECK(sequence.length() == 3);
-        CHECK(copy.length() == 3);
+    SECTION("Subscript") {
+        int expected[] = {1, 2, -3};
+        Sequence sequence = {1, 2, 3};
+        sequence[2] = -3;
         CHECK(sequence == expected);
-        CHECK(copy == expected);
     }
 
-    SECTION("Move") {
-        auto begin = sequence.begin();
-        Sequence moved = std::move(sequence);
-        CHECK(sequence.begin() == nullptr);
-        CHECK(sequence.length() == 0);
-        CHECK(moved.begin() == begin);
-        CHECK(moved.length() == 3);
-        CHECK(moved == expected);
-    }
-}
+    SECTION("Assignment") {
+        int expected[] = {1, 2, 3};
+        Sequence sequence = {1, 2, 3};
 
-TEST_CASE("Sequence - Subscript") {
-    int expected[] = {1, 2, -3};
-    Sequence sequence = {1, 2, 3};
-    sequence[2] = -3;
-    CHECK(sequence == expected);
-}
+        SECTION("Copy") {
+            Sequence copy = {0};
+            copy = sequence;
+            CHECK(sequence.begin() != nullptr);
+            CHECK(copy.begin() != sequence.begin());
+            CHECK(sequence.length() == 3);
+            CHECK(copy.length() == 3);
+            CHECK(sequence == expected);
+            CHECK(copy == expected);
+        }
 
-TEST_CASE("Sequence - Assignment") {
-    int expected[] = {1, 2, 3};
-    Sequence sequence = {1, 2, 3};
-
-    SECTION("Copy") {
-        Sequence copy = {0};
-        copy = sequence;
-        CHECK(sequence.begin() != nullptr);
-        CHECK(copy.begin() != sequence.begin());
-        CHECK(sequence.length() == 3);
-        CHECK(copy.length() == 3);
-        CHECK(sequence == expected);
-        CHECK(copy == expected);
+        SECTION("Move") {
+            auto begin = sequence.begin();
+            Sequence moved = {0};
+            moved = std::move(sequence);
+            CHECK(sequence.begin() == nullptr);
+            CHECK(sequence.length() == 0);
+            CHECK(moved.begin() == begin);
+            CHECK(moved.length() == 3);
+            CHECK(moved == expected);
+        }
     }
 
-    SECTION("Move") {
-        auto begin = sequence.begin();
-        Sequence moved = {0};
-        moved = std::move(sequence);
-        CHECK(sequence.begin() == nullptr);
-        CHECK(sequence.length() == 0);
-        CHECK(moved.begin() == begin);
-        CHECK(moved.length() == 3);
-        CHECK(moved == expected);
-    }
-}
-
-TEST_CASE("Sequence - Concat") {
-    int expected[] = {1, 2, 3, 4, 5};
-    Sequence sequence1 = {1, 2, 3};
-    Sequence sequence2 = {4, 5};
-    CHECK(sequence1 + sequence2 == expected);
-}
-
-TEST_CASE("Sequence - Compare") {
-
-    Sequence sequence = {1, 2, 3};
-
-    SECTION("Equals") {
-        CHECK(sequence == sequence);
-        CHECK_FALSE(sequence != sequence);
-
-        CHECK(Sequence{1, 2, 3} == sequence);
-        CHECK_FALSE(Sequence{1, 2, -3} == sequence);
-
-        CHECK(Sequence{1, 2, -3} != sequence);
-        CHECK_FALSE(Sequence{1, 2, 3} != sequence);
+    SECTION("Concat") {
+        int expected[] = {1, 2, 3, 4, 5};
+        Sequence sequence1 = {1, 2, 3};
+        Sequence sequence2 = {4, 5};
+        CHECK(sequence1 + sequence2 == expected);
     }
 
-    SECTION("Less") {
-        CHECK(Sequence{1, 2} < sequence);
-        CHECK(Sequence{1, 2, 2} < sequence);
-        CHECK_FALSE(Sequence{1, 2, 3} < sequence);
-        CHECK_FALSE(Sequence{1, 2, 4} < sequence);
-        CHECK_FALSE(Sequence{1, 2, 3, 4} < sequence);
+    SECTION("Compare") {
+
+        Sequence sequence = {1, 2, 3};
+
+        SECTION("Equals") {
+            CHECK(sequence == sequence);
+            CHECK_FALSE(sequence != sequence);
+
+            CHECK(Sequence{1, 2, 3} == sequence);
+            CHECK_FALSE(Sequence{1, 2, -3} == sequence);
+
+            CHECK(Sequence{1, 2, -3} != sequence);
+            CHECK_FALSE(Sequence{1, 2, 3} != sequence);
+        }
+
+        SECTION("Less") {
+            CHECK(Sequence{1, 2} < sequence);
+            CHECK(Sequence{1, 2, 2} < sequence);
+            CHECK_FALSE(Sequence{1, 2, 3} < sequence);
+            CHECK_FALSE(Sequence{1, 2, 4} < sequence);
+            CHECK_FALSE(Sequence{1, 2, 3, 4} < sequence);
+        }
     }
-}
 
-TEST_CASE("Sequence - Sort") {
+    SECTION("Sort") {
 
-    int expected[] = {1, 2, 3, 4, 5};
-    Sequence sequence = {4, 3, 5, 1, 2};
+        int expected[] = {1, 2, 3, 4, 5};
+        Sequence sequence = {4, 3, 5, 1, 2};
 
-    CHECK(sequence.sorted() == expected);
+        CHECK(sequence.sorted() == expected);
+    }
 }
 
 #pragma clang diagnostic pop

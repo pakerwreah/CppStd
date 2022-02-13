@@ -7,36 +7,39 @@
 
 using namespace PK;
 
-TEST_CASE("Optional - Int") {
+TEST_CASE("Optional") {
 
-    Optional<int> opt(nullptr);
+    SECTION("Int") {
 
-    CHECK_THROWS_MATCHES(opt = 1, std::runtime_error, Catch::Message("Cannot assign to nullptr"));
-    CHECK_THROWS_MATCHES(*opt, std::runtime_error, Catch::Message("Cannot dereference nullptr"));
+        Optional<int> opt(nullptr);
 
-    int tmp = 1;
-    CHECK_NOTHROW(opt = Optional(&tmp));
-    CHECK(opt == 1);
-    CHECK(*opt == 1);
+        CHECK_THROWS_MATCHES(opt = 1, std::runtime_error, Catch::Message("Cannot assign to nullptr"));
+        CHECK_THROWS_MATCHES(*opt, std::runtime_error, Catch::Message("Cannot dereference nullptr"));
 
-    CHECK_NOTHROW(opt = 0);
-    CHECK(opt == 0);
-    CHECK(*opt == 0);
+        int tmp = 1;
+        CHECK_NOTHROW(opt = Optional(&tmp));
+        CHECK(opt == 1);
+        CHECK(*opt == 1);
 
-    CHECK(opt);
-    opt.clear();
-    CHECK_FALSE(opt);
-}
+        CHECK_NOTHROW(opt = 0);
+        CHECK(opt == 0);
+        CHECK(*opt == 0);
 
-TEST_CASE("Optional - Object") {
+        CHECK(opt);
+        opt.clear();
+        CHECK_FALSE(opt);
+    }
 
-    struct Test {
-        int value;
-    };
+    SECTION("Object") {
 
-    Test obj = {1};
+        struct Test {
+            int value;
+        };
 
-    Optional<Test> optional(&obj);
+        Test obj = {1};
 
-    CHECK(optional->value == 1);
+        Optional<Test> optional(&obj);
+
+        CHECK(optional->value == 1);
+    }
 }

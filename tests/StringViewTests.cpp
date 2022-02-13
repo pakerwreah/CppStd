@@ -11,100 +11,103 @@ using namespace PK;
 #pragma ide diagnostic ignored "performance-unnecessary-copy-initialization"
 #pragma ide diagnostic ignored "cppcoreguidelines-slicing"
 
-TEST_CASE("StringView - Constructor") {
+TEST_CASE("StringView") {
 
-    const char *text = "Hello";
-    StringView sv = text;
-    CHECK(sv.length() == 5);
-    CHECK(sv.begin() == text);
-    CHECK(sv.end() == text + 5);
-}
+    SECTION("Constructor") {
 
-TEST_CASE("StringView - String") {
-
-    String string = "Hello";
-    StringView sv = string;
-    CHECK(sv.length() == string.length());
-    CHECK(sv.begin() == string.begin());
-    CHECK(sv.end() == string.end());
-}
-
-TEST_CASE("StringView - Copy") {
-
-    StringView sv1 = "Hello";
-    StringView sv2 = sv1;
-    CHECK(sv1.length() == sv2.length());
-    CHECK(sv1.begin() == sv2.begin());
-    CHECK(sv1.end() == sv2.end());
-}
-
-TEST_CASE("StringView - Equals") {
-
-    StringView string = "Hello";
-
-    SECTION("YES") {
-        StringView other = "Hello";
-        CHECK(string == other);
+        const char *text = "Hello";
+        StringView sv = text;
+        CHECK(sv.length() == 5);
+        CHECK(sv.begin() == text);
+        CHECK(sv.end() == text + 5);
     }
 
-    SECTION("NO") {
-        StringView other = "Hellu";
-        CHECK_FALSE(string == other);
-    }
-}
+    SECTION("String") {
 
-TEST_CASE("StringView - Less") {
-
-    StringView string = "Hello";
-
-    CHECK(StringView("Hell") < string);
-    CHECK(StringView("Helli") < string);
-    CHECK_FALSE(StringView("Hello") < string);
-    CHECK_FALSE(StringView("Hellu") < string);
-    CHECK_FALSE(StringView("Hello!") < string);
-}
-
-TEST_CASE("StringView - Substring") {
-
-    StringView string = "Hello World!";
-    CHECK(string.substring(6, 5) == "World");
-}
-
-TEST_CASE("StringView - IndexOf") {
-
-    StringView string = "Hello World!";
-
-    SECTION("Begin") {
-        CHECK(string.indexOf("Hello World!") == 0);
+        String string = "Hello";
+        StringView sv = string;
+        CHECK(sv.length() == string.length());
+        CHECK(sv.begin() == string.begin());
+        CHECK(sv.end() == string.end());
     }
 
-    SECTION("Middle") {
-        CHECK(string.indexOf("World!") == 6);
+    SECTION("Copy") {
+
+        StringView sv1 = "Hello";
+        StringView sv2 = sv1;
+        CHECK(sv1.length() == sv2.length());
+        CHECK(sv1.begin() == sv2.begin());
+        CHECK(sv1.end() == sv2.end());
     }
 
-    SECTION("Not found") {
-        CHECK(string.indexOf("Worlds") == -1);
-    }
-}
+    SECTION("Equals") {
 
-TEST_CASE("StringView - Contains") {
+        StringView string = "Hello";
 
-    StringView string = "Hello World!";
+        SECTION("YES") {
+            StringView other = "Hello";
+            CHECK(string == other);
+        }
 
-    SECTION("YES - Equal") {
-        CHECK(string.contains("Hello World!"));
-    }
-
-    SECTION("YES - Smaller") {
-        CHECK(string.contains("World"));
+        SECTION("NO") {
+            StringView other = "Hellu";
+            CHECK_FALSE(string == other);
+        }
     }
 
-    SECTION("NO - Bigger") {
-        CHECK_FALSE(string.contains("Hello World!!!"));
+    SECTION("Less") {
+
+        StringView string = "Hello";
+
+        CHECK(StringView("Hell") < string);
+        CHECK(StringView("Helli") < string);
+        CHECK_FALSE(StringView("Hello") < string);
+        CHECK_FALSE(StringView("Hellu") < string);
+        CHECK_FALSE(StringView("Hello!") < string);
     }
 
-    SECTION("NO - Smaller") {
-        CHECK_FALSE(string.contains("Hellu"));
+    SECTION("Substring") {
+
+        StringView string = "Hello World!";
+        CHECK(string.substring(6, 5) == "World");
+    }
+
+    SECTION("IndexOf") {
+
+        StringView string = "Hello World!";
+
+        SECTION("Begin") {
+            CHECK(string.indexOf("Hello World!") == 0);
+        }
+
+        SECTION("Middle") {
+            CHECK(string.indexOf("World!") == 6);
+        }
+
+        SECTION("Not found") {
+            CHECK(string.indexOf("Worlds") == -1);
+        }
+    }
+
+    SECTION("Contains") {
+
+        StringView string = "Hello World!";
+
+        SECTION("YES - Equal") {
+            CHECK(string.contains("Hello World!"));
+        }
+
+        SECTION("YES - Smaller") {
+            CHECK(string.contains("World"));
+        }
+
+        SECTION("NO - Bigger") {
+            CHECK_FALSE(string.contains("Hello World!!!"));
+        }
+
+        SECTION("NO - Smaller") {
+            CHECK_FALSE(string.contains("Hellu"));
+        }
     }
 }
 
