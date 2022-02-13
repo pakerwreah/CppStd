@@ -55,6 +55,9 @@ namespace PK {
             return false;
         }
 
+        template<typename I2>
+        bool operator>(const Collection<T, I2> &other) const { return other < *this; }
+
     private:
         template<typename I2>
         bool equals(const Collection<T, I2> &other) const {
