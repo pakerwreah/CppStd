@@ -13,7 +13,7 @@ TEST_CASE("HashMap") {
     HashMap<String, String> map;
 
     for (int i = 1; i <= 3; i++)
-        map.set("Key " + StringUtils::to_string(i), "Value " + StringUtils::to_string(i));
+        map.insert("Key " + StringUtils::to_string(i), "Value " + StringUtils::to_string(i));
 
     SECTION("Key not found") {
         CHECK_THROWS_MATCHES(map["Key 0"], std::range_error, Catch::Message("Key not found"));
@@ -31,7 +31,7 @@ TEST_CASE("HashMap") {
     }
 
     SECTION("Replace") {
-        map.set("Key 2", "XYZ");
+        map.insert("Key 2", "XYZ");
         CHECK(map["Key 2"] == "XYZ");
         CHECK(map.length() == 3);
     }
@@ -53,12 +53,12 @@ TEST_CASE("HashMap") {
         CHECK(map.length() == 3);
 
         for (int i = 4; i <= 12; i++)
-            map.set("Key " + StringUtils::to_string(i), "Value " + StringUtils::to_string(i));
+            map.insert("Key " + StringUtils::to_string(i), "Value " + StringUtils::to_string(i));
 
         CHECK(map.capacity() == 16);
         CHECK(map.length() == 12);
 
-        map.set("Key 14", "Value 14");
+        map.insert("Key 14", "Value 14");
 
         CHECK(map.capacity() == 32);
         CHECK(map.length() == 13);

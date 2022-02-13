@@ -4,35 +4,31 @@
 
 #pragma once
 
-#include "List.h"
 #include "Hash.h"
+#include "Map.h"
 
 namespace PK {
 
     template<typename K, typename V, typename Hash = Hash<K>>
-    class HashMap {
-    public:
-        struct Entry {
+    class HashMap : public Map<K, V> {
+    private:
+        using Entry = typename HashMap::Entry;
+
+        struct Node {
+            const size_t hash;
             const K key;
             V value;
-        };
 
-    private:
-        struct HashNode : public Entry {
-            const size_t hash;
-
-            HashNode(const K &key, const V &value)
-                    : Entry{key, value}
-                    , hash(Hash::make(key)) {}
+            Node(const K &key, const V &value) : hash(Hash::make(key)), key{key}, value{value} {}
         };
 
         size_t m_length = 0;
         size_t m_capacity = 16;
-        List<HashNode> **map = alloc(m_capacity);
+        List<Node> **map = alloc(m_capacity);
 
-        List<HashNode> **alloc(size_t capacity) const {
+        List<Node> **alloc(size_t capacity) const {
 
-            auto **new_map = new List<HashNode> *[capacity];
+            auto **new_map = new List<Node> *[capacity];
 
             for (int i = 0; i < capacity; i++)
                 new_map[i] = nullptr;
@@ -42,17 +38,17 @@ namespace PK {
 
         void resize(size_t new_capacity) {
 
-            List<HashNode> **new_map = alloc(new_capacity);
+            List<Node> **new_map = alloc(new_capacity);
 
             size_t copied = 0;
             for (int i = 0; i < m_capacity && copied < m_length; i++) {
                 if (!map[i]) continue;
-                for (const HashNode &node: *map[i]) {
+                for (const Node &node: *map[i]) {
 
                     size_t new_pos = node.hash % new_capacity;
-                    List<HashNode> *list = new_map[new_pos];
+                    List<Node> *list = new_map[new_pos];
 
-                    if (!list) new_map[new_pos] = (list = new List<HashNode>);
+                    if (!list) new_map[new_pos] = (list = new List<Node>);
                     list->append(node);
                     copied++;
                 }
@@ -66,12 +62,12 @@ namespace PK {
 
         V *find(const K &key, size_t pos) const {
 
-            const List<HashNode> *list = map[pos];
+            const List<Node> *list = map[pos];
 
             if (list) {
-                for (Entry &entry: *list) {
-                    if (entry.key == key)
-                        return &entry.value;
+                for (Node &node: *list) {
+                    if (node.key == key)
+                        return &node.value;
                 }
             }
 
@@ -79,15 +75,15 @@ namespace PK {
         }
 
     public:
-        size_t length() const { return m_length; }
-
         size_t capacity() const { return m_capacity; }
 
-        V *find(const K &key) const {
+        size_t length() const override { return m_length; }
+
+        V *find(const K &key) const override {
             return find(key, Hash::make(key) % m_capacity);
         }
 
-        V &operator[](const K &key) const {
+        V &operator[](const K &key) const override {
 
             auto item = find(key);
 
@@ -97,7 +93,7 @@ namespace PK {
             return *item;
         }
 
-        void set(const K &key, const V &value) {
+        void insert(const K &key, const V &value) override {
 
             size_t hash = Hash::make(key);
             size_t pos = hash % m_capacity;
@@ -113,31 +109,31 @@ namespace PK {
                 pos = hash % new_capacity;
             }
 
-            List<HashNode> *list = map[pos];
-            if (!list) map[pos] = (list = new List<HashNode>);
+            List<Node> *list = map[pos];
+            if (!list) map[pos] = (list = new List<Node>);
 
             list->append({key, value});
             m_length++;
         }
 
-        List<Entry> entries() const {
+        List<Entry> entries() const override {
             List<Entry> entries;
             for (int i = 0; i < m_capacity; i++) {
                 if (!map[i]) continue;
-                for (const Entry &entry: *map[i])
-                    entries.append(entry);
+                for (const Node &node: *map[i])
+                    entries.append({node.key, node.value});
             }
             return entries;
         }
 
-        List<K> keys() const {
+        List<K> keys() const override {
             List<K> keys;
             for (const Entry &entry: entries())
                 keys.append(entry.key);
             return keys;
         }
 
-        List<V> values() const {
+        List<V> values() const override {
             List<V> values;
             for (const Entry &entry: entries())
                 values.append(entry.value);
