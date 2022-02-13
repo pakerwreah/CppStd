@@ -83,16 +83,6 @@ namespace PK {
             return find(key, Hash::make(key) % m_capacity);
         }
 
-        V &operator[](const K &key) const override {
-
-            auto item = find(key);
-
-            if (!item)
-                throw std::range_error("Key not found");
-
-            return *item;
-        }
-
         void insert(const K &key, const V &value) override {
 
             size_t hash = Hash::make(key);
@@ -124,20 +114,6 @@ namespace PK {
                     entries.append({node.key, node.value});
             }
             return entries;
-        }
-
-        List<K> keys() const override {
-            List<K> keys;
-            for (const Entry &entry: entries())
-                keys.append(entry.key);
-            return keys;
-        }
-
-        List<V> values() const override {
-            List<V> values;
-            for (const Entry &entry: entries())
-                values.append(entry.value);
-            return values;
         }
     };
 }

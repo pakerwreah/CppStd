@@ -123,20 +123,6 @@ namespace PK {
             appendEntriesOf(node->right, entries);
         }
 
-        void appendKeysOf(Node *node, List<V> &keys) const {
-            if (!node) return;
-            appendKeysOf(node->left, keys);
-            keys.append(node->key);
-            appendKeysOf(node->right, keys);
-        }
-
-        void appendValuesOf(Node *node, List<V> &values) const {
-            if (!node) return;
-            appendValuesOf(node->left, values);
-            values.append(node->value);
-            appendValuesOf(node->right, values);
-        }
-
     public:
         size_t length() const override { return m_length; }
 
@@ -146,32 +132,10 @@ namespace PK {
             root = insert(root, key, value);
         }
 
-        V &operator[](const K &key) const override {
-
-            auto item = find(key);
-
-            if (!item)
-                throw std::range_error("Key not found");
-
-            return *item;
-        }
-
         List<Entry> entries() const override {
             List<Entry> entries;
             appendEntriesOf(root, entries);
             return entries;
-        }
-
-        List<K> keys() const override {
-            List<V> keys;
-            appendKeysOf(root, keys);
-            return keys;
-        }
-
-        List<V> values() const override {
-            List<V> values;
-            appendValuesOf(root, values);
-            return values;
         }
     };
 }
