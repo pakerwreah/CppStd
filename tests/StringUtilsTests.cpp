@@ -18,7 +18,9 @@ TEST_CASE("StringUtils") {
         CHECK(StringUtils::to_string(1.23, 2) == "1.23");
         CHECK(StringUtils::to_string(true) == "true");
         CHECK(StringUtils::to_string(false) == "false");
-    }SECTION("Split") {
+    }
+
+    SECTION("Split") {
         const String expected[] = {"a", "bcd", "e"};
         auto split = StringUtils::split("a.bcd..e.", ".");
         CHECK(split == expected);
