@@ -9,12 +9,12 @@ namespace PK {
     template<typename T>
     class Optional {
     private:
-        T *m_data;
+        const T *m_data;
+        bool is_copy;
 
     public:
-        Optional(T *data) : m_data(data) {}
-
-        void clear() { m_data = nullptr; }
+        explicit Optional(T *data) : m_data(data), is_copy(false) {}
+        explicit Optional(const T &data) : m_data(new T(data)), is_copy(true) {}
 
         T operator*() const {
             if (!m_data)
@@ -22,25 +22,39 @@ namespace PK {
             return *m_data;
         }
 
-        T *operator->() const { return m_data; }
+        const T *operator->() const { return m_data; }
 
-        operator bool() const { return m_data != nullptr; }
+        explicit operator bool() const { return m_data != nullptr; }
 
-        bool operator==(const T &other) const {
-            return m_data != nullptr && *m_data == other;
+        bool operator==(const Optional &other) const {
+            return equals(other);
         }
 
-        template<typename V>
-        Optional &operator=(const V &value) {
-            if (!m_data)
-                throw std::runtime_error("Cannot assign to nullptr");
-            *m_data = value;
+        bool operator!=(const Optional &other) const {
+            return !equals(other);
+        }
+
+        Optional &operator=(const T &value) {
+            if (is_copy)
+                delete m_data;
+            m_data = new T(value);
+            is_copy = true;
             return *this;
         }
 
         Optional &operator=(const T *value) {
+            if (is_copy)
+                delete m_data;
             m_data = value;
+            is_copy = false;
             return *this;
+        }
+
+    private:
+        bool equals(const Optional &other) const {
+            return this == &other
+                   || m_data == other.m_data
+                   || (m_data != nullptr && other.m_data != nullptr && *m_data == *(other.m_data));
         }
     };
 }
