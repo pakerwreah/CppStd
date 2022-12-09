@@ -9,7 +9,7 @@
 
 namespace PK {
 
-    template<typename K, typename V, typename Hash = Hash<K>>
+    template<typename K, typename V>
     class HashMap : public Map<K, V> {
     private:
         using Entry = typename HashMap::Entry;

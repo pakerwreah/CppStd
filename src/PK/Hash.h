@@ -6,14 +6,11 @@
 
 #include "String.h"
 
-namespace PK {
-
+namespace PK::Hash {
     template<typename T>
-    struct Hash {
-        static size_t make(const T &value) {
-            return std::hash<T>()(value);
-        }
-    };
+    static size_t make(const T &value) {
+        return std::hash<T>()(value);
+    }
 }
 
 namespace std {
