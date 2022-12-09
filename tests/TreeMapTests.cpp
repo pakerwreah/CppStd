@@ -2,7 +2,7 @@
 // Created by Paker on 13/02/22.
 //
 
-#include "catch.hpp"
+#include "lib/catch.hpp"
 #include "PK/TreeMap.h"
 #include "PK/StringUtils.h"
 

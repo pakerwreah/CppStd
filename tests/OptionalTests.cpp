@@ -2,7 +2,7 @@
 // Created by Paker on 05/09/21.
 //
 
-#include "catch.hpp"
+#include "lib/catch.hpp"
 #include "PK/Optional.h"
 
 using namespace PK;

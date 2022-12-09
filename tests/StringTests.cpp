@@ -2,7 +2,7 @@
 // Created by Paker on 01/09/21.
 //
 
-#include "catch.hpp"
+#include "lib/catch.hpp"
 #include "PK/String.h"
 
 using namespace PK;

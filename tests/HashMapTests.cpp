@@ -2,7 +2,7 @@
 // Created by Paker on 04/09/21.
 //
 
-#include "catch.hpp"
+#include "lib/catch.hpp"
 #include "PK/HashMap.h"
 #include "PK/StringUtils.h"
 
