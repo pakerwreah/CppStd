@@ -19,7 +19,7 @@ namespace PK {
         char *alloc_data_or_sso(size_t length) const;
         char *copy_data_if_sso(const String &other);
 
-        String(size_t length);
+        explicit String(size_t length);
 
     public:
         String(const String &other);

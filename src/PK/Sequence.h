@@ -15,7 +15,7 @@ namespace PK {
         size_t m_length = 0;
         T *m_data = nullptr;
 
-        Sequence(size_t length) {
+        explicit Sequence(size_t length) {
             m_length = length;
             m_data = new T[m_length];
         }
